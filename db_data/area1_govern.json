@@ -1,0 +1,121 @@
+{
+    "area_id": "GOVERN",
+    "name": "Governance & Risk Oversight",
+    "weight": 1.00,
+    "description": "Oversight, roles and responsibilities, policies and integration of cybersecurity into overall business and risk management.",
+    "maturity_scale": {
+      "0": "Not implemented – no practices in place.",
+      "1": "Ad hoc – informal practices, not documented or consistent.",
+      "2": "Partially defined – some documented practices, applied inconsistently.",
+      "3": "Defined and implemented – documented, communicated, and generally followed.",
+      "4": "Measured and monitored – effectiveness is regularly reviewed and improved.",
+      "5": "Optimized – practices are proactive, continuously improved, and aligned with business strategy."
+    },
+    "questions": [
+      {
+        "question_id": "GOV_Q1",
+        "text": "Is there a formally approved cybersecurity / information security policy in place?",
+        "description": "Assesses whether the organization has a documented and formally approved security policy that defines objectives, scope and general rules for protecting information and systems.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "GOV_Q2",
+        "text": "Are roles and responsibilities for cybersecurity clearly defined and assigned (e.g., CISO, security officer, system owners)?",
+        "description": "Evaluates whether responsibilities related to cybersecurity are explicitly assigned, documented and understood across the organization.",
+        "weight": 1.10
+      },
+      {
+        "question_id": "GOV_Q3",
+        "text": "Does top management regularly review and oversee the organization's cybersecurity posture?",
+        "description": "Focuses on the involvement of top management in reviewing cybersecurity risks, performance indicators and key improvement initiatives.",
+        "weight": 1.0
+      },
+      {
+        "question_id": "GOV_Q4",
+        "text": "Is cybersecurity integrated into the overall enterprise risk management (ERM) process?",
+        "description": "Checks whether cybersecurity risks are assessed, prioritized and managed as part of the broader enterprise risk management framework.",
+        "weight": 1.05
+      },
+      {
+        "question_id": "GOV_Q5",
+        "text": "Are there formal requirements and oversight for cybersecurity in relationships with external suppliers and service providers?",
+        "description": "Assesses whether the organization defines and monitors cybersecurity expectations for third parties, such as suppliers, cloud providers and outsourced services.",
+        "weight": 0.85
+      },
+      {
+        "question_id": "GOV_Q6",
+        "text": "Are legal, regulatory and contractual cybersecurity requirements (including NIS2 where applicable) identified and regularly reviewed?",
+        "description": "Evaluates whether the organization understands and tracks applicable cybersecurity-related legal, regulatory and contractual obligations and reflects them in internal governance.",
+        "weight": 0.85
+      }
+    ],
+    "recommendations": [
+      {
+        "question_id": "GOV_Q1",
+        "applies_if_score_below": 3,
+        "title": "Establish and approve a formal cybersecurity policy",
+        "description": "The organization lacks a formally approved cybersecurity or information security policy that sets clear objectives, scope and expectations. Without this foundation, it is difficult to enforce consistent security practices across the organization.",
+        "improvement_tips": "Draft a formal cybersecurity / information security policy covering scope, objectives, roles, acceptable use, access control, incident reporting and minimum technical controls. Seek formal approval from top management and communicate the policy to all employees. Review and update the policy at least annually or after major changes.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 5.2; Annex A.5.1",
+        "nist_ref": "NIST CSF 2.0 – GV.PO (Policy)",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "high"
+      },
+      {
+        "question_id": "GOV_Q2",
+        "applies_if_score_below": 3,
+        "title": "Define and document cybersecurity roles and responsibilities",
+        "description": "Roles and responsibilities related to cybersecurity are not clearly defined or communicated. This leads to gaps in ownership, duplicated efforts or uncertainty in decision-making.",
+        "improvement_tips": "Identify key roles for cybersecurity (e.g., CISO, security officer, system owners, data owners). Document responsibilities in job descriptions, policies or RACI matrices. Ensure that responsibilities are communicated, agreed and supported by management. Review and update as the organization evolves.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 5.3; Annex A.5.2",
+        "nist_ref": "NIST CSF 2.0 – GV.RR (Roles, Responsibilities, and Authorities)",
+        "nis2_ref": "NIS2 – Article 20(1) and 20(2)",
+        "priority": "high"
+      },
+      {
+        "question_id": "GOV_Q3",
+        "applies_if_score_below": 3,
+        "title": "Increase top management oversight of cybersecurity",
+        "description": "Top management does not regularly review cybersecurity risks, performance or improvement plans. This reduces the visibility and priority of cybersecurity at the strategic level.",
+        "improvement_tips": "Introduce regular (e.g., quarterly) cybersecurity review meetings with top management. Present key risks, incidents, security KPIs and progress on improvement actions. Ensure that cybersecurity topics are integrated into management review and decision-making processes.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 9.3 (Management review)",
+        "nist_ref": "NIST CSF 2.0 – GV.OV (Oversight)",
+        "nis2_ref": "NIS2 – Article 20(1)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "GOV_Q4",
+        "applies_if_score_below": 3,
+        "title": "Integrate cybersecurity into enterprise risk management",
+        "description": "Cybersecurity risks are not consistently considered within the broader enterprise risk management (ERM) process. As a result, cyber risks may be under-prioritized compared to other business risks.",
+        "improvement_tips": "Include cybersecurity risks in the organization's risk register and ERM process. Define risk owners, likelihood and impact criteria for cyber risks. Align risk appetite and treatment plans with business objectives. Review cyber risks regularly together with other strategic and operational risks.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 6.1.2 (Information security risk assessment)",
+        "nist_ref": "NIST CSF 2.0 – GV.RM (Risk Management Strategy), ID.RA (Risk Assessment)",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "high"
+      },
+      {
+        "question_id": "GOV_Q5",
+        "applies_if_score_below": 3,
+        "title": "Strengthen cybersecurity governance for third-party relationships",
+        "description": "Cybersecurity requirements for suppliers and service providers are not clearly defined or monitored. This increases exposure to risks originating from the supply chain.",
+        "improvement_tips": "Define minimum cybersecurity requirements for suppliers and service providers, especially those with access to critical systems or data. Include security clauses in contracts (e.g., incident notification, access control, data protection). Periodically review supplier compliance, using questionnaires, audits or certifications where relevant.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.19, A.5.20",
+        "nist_ref": "NIST CSF 2.0 – GV.SC (Cybersecurity Supply Chain Risk Management)",
+        "cis_ref": "CIS Controls v8 – Control 15.1, 15.3",
+        "nis2_ref": "NIS2 – Article 21(2)(d)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "GOV_Q6",
+        "applies_if_score_below": 3,
+        "title": "Systematically manage legal, regulatory and contractual cybersecurity requirements",
+        "description": "Legal, regulatory and contractual cybersecurity requirements (including NIS2 where applicable) are not fully identified, tracked or reflected in internal policies and controls.",
+        "improvement_tips": "Identify applicable cybersecurity-related laws, regulations and contractual obligations (e.g., NIS2, sector-specific rules, customer requirements). Maintain a register of these obligations and map them to internal policies and controls. Review the register regularly together with legal/compliance functions and update governance documents accordingly.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.31",
+        "nist_ref": "NIST CSF 2.0 – GV.OC (Organizational Context)",
+        "nis2_ref": "NIS2 – Article 20 and 21",
+        "priority": "high"
+      }
+    ]
+  }

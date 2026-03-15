@@ -1,0 +1,126 @@
+{
+    "area_id": "DETECT",
+    "name": "Detect – Monitoring, Logging & Anomaly Detection",
+    "weight": 1.10,
+    "description": "Capabilities to detect cybersecurity events and anomalies in a timely manner through continuous monitoring, logging, and analysis.",
+    "maturity_scale": {
+      "0": "Not implemented – no monitoring or detection capabilities exist.",
+      "1": "Ad hoc – monitoring performed occasionally without clear processes.",
+      "2": "Partially defined – some monitoring activities exist but lack coverage or consistency.",
+      "3": "Defined and implemented – documented procedures for event monitoring and detection are followed.",
+      "4": "Measured and monitored – detection effectiveness is tracked and continuously improved.",
+      "5": "Optimized – automated and proactive monitoring integrated into business processes."
+    },
+    "questions": [
+      {
+        "question_id": "DE_Q1",
+        "text": "Are security events and system logs collected and retained from critical systems?",
+        "description": "Assesses whether logging is enabled for critical systems and stored securely for analysis and investigation.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "DE_Q2",
+        "text": "Are logs and alerts regularly reviewed to identify potential security incidents or anomalies?",
+        "description": "Evaluates whether monitoring staff or automated tools routinely analyze logs and alerts for suspicious activity.",
+        "weight": 1.05
+      },
+      {
+        "question_id": "DE_Q3",
+        "text": "Is there centralized monitoring (e.g., SIEM or log management) in place to correlate events across systems?",
+        "description": "Checks whether monitoring data from multiple systems is aggregated and correlated to detect complex attack patterns.",
+        "weight": 1.0
+      },
+      {
+        "question_id": "DE_Q4",
+        "text": "Are baselines of normal network and user activity established and used to detect anomalies?",
+        "description": "Assesses whether the organization defines 'normal' behavior to support anomaly-based detection and behavioral analytics.",
+        "weight": 0.80
+      },
+      {
+        "question_id": "DE_Q5",
+        "text": "Are detection systems and alerts periodically tested and fine-tuned for accuracy?",
+        "description": "Evaluates whether detection tools and rules are regularly reviewed, tuned, and validated to minimize false positives or negatives.",
+        "weight": 0.90
+      },
+      {
+        "question_id": "DE_Q6",
+        "text": "Are detected cybersecurity events classified, documented, and communicated to relevant stakeholders?",
+        "description": "Checks whether incidents and anomalies are recorded, categorized by severity, and escalated to the appropriate response team.",
+        "weight": 1.10
+      }
+    ],
+    "recommendations": [
+      {
+        "question_id": "DE_Q1",
+        "applies_if_score_below": 3,
+        "title": "Implement centralized log collection and secure retention",
+        "description": "Critical systems are not consistently generating or storing security logs, limiting forensic and detection capability.",
+        "improvement_tips": "Enable logging on all critical systems and network devices. Forward logs to a centralized, protected repository. Define log retention periods (e.g., 90–180 days) and restrict access to authorized personnel only.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.15, A.8.16",
+        "nist_ref": "NIST CSF 2.0 – DE.CM (Continuous Monitoring)",
+        "cis_ref": "CIS Controls v8 – Control 8.2, 8.3",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "high"
+      },
+      {
+        "question_id": "DE_Q2",
+        "applies_if_score_below": 3,
+        "title": "Establish routine review of logs and alerts",
+        "description": "Logs and alerts are collected but rarely analyzed, delaying detection of potential incidents.",
+        "improvement_tips": "Define responsibilities and frequency for reviewing logs and alerts. Use automation or dashboards to highlight anomalies and prioritize reviews. Train analysts to recognize patterns indicative of compromise.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.16",
+        "nist_ref": "NIST CSF 2.0 – DE.CM (Continuous Monitoring), DE.AE (Adverse Event Analysis)",
+        "cis_ref": "CIS Controls v8 – Control 8.11",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "DE_Q3",
+        "applies_if_score_below": 3,
+        "title": "Deploy centralized monitoring or SIEM capability",
+        "description": "Event data is scattered across systems with no central view, reducing ability to detect coordinated attacks.",
+        "improvement_tips": "Implement a Security Information and Event Management (SIEM) or equivalent centralized log management solution. Integrate key sources such as firewalls, endpoints, servers, and identity systems. Configure correlation rules for common attack patterns and ensure alert routing to responsible teams.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.15, A.8.16",
+        "nist_ref": "NIST CSF 2.0 – DE.CM (Continuous Monitoring), DE.AE (Adverse Event Analysis)",
+        "cis_ref": "CIS Controls v8 – Control 8.9, 13.1",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "high"
+      },
+      {
+        "question_id": "DE_Q4",
+        "applies_if_score_below": 3,
+        "title": "Define behavioral baselines and enable anomaly detection",
+        "description": "Anomalous behavior goes undetected because normal baselines are not defined or monitored.",
+        "improvement_tips": "Develop baseline metrics for normal system, network, and user behavior. Use monitoring tools with anomaly-detection or behavioral analytics features. Update baselines periodically to reflect operational changes.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.16",
+        "nist_ref": "NIST CSF 2.0 – DE.AE (Adverse Event Analysis)",
+        "cis_ref": "CIS Controls v8 – Control 13.3, 13.11",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "DE_Q5",
+        "applies_if_score_below": 3,
+        "title": "Regularly test and tune detection capabilities",
+        "description": "Detection systems generate excessive false positives or miss threats due to outdated or untested configurations.",
+        "improvement_tips": "Perform periodic tuning of SIEM correlation rules, IDS/IPS signatures, and endpoint detection policies. Validate detection effectiveness through simulated attacks or red-team exercises and document tuning results.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.16",
+        "nist_ref": "NIST CSF 2.0 – DE.AE (Adverse Event Analysis), ID.IM (Improvement)",
+        "cis_ref": "CIS Controls v8 – Control 13.11, 18.1",
+        "nis2_ref": "NIS2 – Article 21(2)(f)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "DE_Q6",
+        "applies_if_score_below": 3,
+        "title": "Formalize event classification and communication procedures",
+        "description": "Detected events are not consistently classified or escalated, delaying incident response.",
+        "improvement_tips": "Define event severity levels (e.g., Low, Medium, High) and escalation paths. Document how detected events are logged, categorized, and communicated to incident response teams or management. Ensure traceability from detection to response closure.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.25",
+        "nist_ref": "NIST CSF 2.0 – DE.AE (Adverse Event Analysis), RS.CO (Incident Response Reporting and Communication)",
+        "cis_ref": "CIS Controls v8 – Control 17.3, 17.9",
+        "nis2_ref": "NIS2 – Article 21(2)(b)",
+        "priority": "high"
+      }
+    ]
+  }

@@ -1,0 +1,126 @@
+{
+    "area_id": "RESPOND",
+    "name": "Respond – Incident Response & Reporting",
+    "weight": 1.0,
+    "description": "Processes and capabilities to respond to cybersecurity incidents effectively, minimize impact, communicate clearly and comply with regulatory reporting obligations.",
+    "maturity_scale": {
+      "0": "Not implemented – no defined response capability.",
+      "1": "Ad hoc – reactions are improvised and undocumented.",
+      "2": "Partially defined – some procedures exist but are incomplete or inconsistently applied.",
+      "3": "Defined and implemented – documented and communicated incident response plan followed by staff.",
+      "4": "Measured and monitored – response effectiveness is tested and improved.",
+      "5": "Optimized – proactive, well-coordinated response integrated with business continuity and external stakeholders."
+    },
+    "questions": [
+      {
+        "question_id": "RS_Q1",
+        "text": "Is there a formally documented and approved incident response plan (IRP)?",
+        "description": "Assesses whether the organization has a written, approved plan describing detection, analysis, containment, eradication and recovery procedures.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "RS_Q2",
+        "text": "Are incident response roles, responsibilities and communication channels clearly defined?",
+        "description": "Evaluates whether staff know who to contact, escalation paths, and responsibilities during incidents.",
+        "weight": 1.10
+      },
+      {
+        "question_id": "RS_Q3",
+        "text": "Are cybersecurity incidents recorded, classified and analyzed to identify root causes and lessons learned?",
+        "description": "Checks whether incidents are documented in a structured way, categorized and followed by post-incident analysis.",
+        "weight": 1.0
+      },
+      {
+        "question_id": "RS_Q4",
+        "text": "Are incident response exercises or simulations conducted periodically?",
+        "description": "Assesses whether the organization tests its IRP through tabletop or technical simulations to evaluate readiness.",
+        "weight": 0.85
+      },
+      {
+        "question_id": "RS_Q5",
+        "text": "Is there a defined process for timely notification to regulators, partners and affected parties as required (e.g., NIS2 reporting)?",
+        "description": "Evaluates compliance with external reporting obligations and coordination with stakeholders during incidents.",
+        "weight": 0.95
+      },
+      {
+        "question_id": "RS_Q6",
+        "text": "Are incident response improvements tracked and implemented after reviews or exercises?",
+        "description": "Checks whether lessons learned and corrective actions from incidents or drills are systematically implemented and verified.",
+        "weight": 0.95
+      }
+    ],
+    "recommendations": [
+      {
+        "question_id": "RS_Q1",
+        "applies_if_score_below": 3,
+        "title": "Develop and approve a formal Incident Response Plan (IRP)",
+        "description": "The organization lacks a documented incident response plan, resulting in inconsistent reactions to security events.",
+        "improvement_tips": "Create a formal IRP defining detection, analysis, containment, eradication and recovery phases. Include communication, reporting and escalation steps. Obtain management approval and review at least annually.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.24",
+        "nist_ref": "NIST CSF 2.0 – RS.MA (Incident Management)",
+        "cis_ref": "CIS Controls v8 – Control 17.4",
+        "nis2_ref": "NIS2 – Article 21(2)(b)",
+        "priority": "high"
+      },
+      {
+        "question_id": "RS_Q2",
+        "applies_if_score_below": 3,
+        "title": "Define incident response roles and communication structure",
+        "description": "Responsibilities and communication channels during incidents are unclear, causing delays and confusion.",
+        "improvement_tips": "Assign specific roles (Incident Manager, Communications Lead, Technical Lead, Legal/Compliance). Document escalation matrix and contact lists. Train staff on when and how to report incidents.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.24, A.5.26",
+        "nist_ref": "NIST CSF 2.0 – RS.CO (Incident Response Reporting and Communication)",
+        "cis_ref": "CIS Controls v8 – Control 17.1, 17.5, 17.6",
+        "nis2_ref": "NIS2 – Article 21(2)(b)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RS_Q3",
+        "applies_if_score_below": 3,
+        "title": "Record and analyze incidents for root causes and improvements",
+        "description": "Incidents are handled but not analyzed systematically, missing opportunities to prevent recurrence.",
+        "improvement_tips": "Maintain an incident register recording type, impact, root cause and corrective actions. Conduct post-incident reviews and feed findings into security improvements and awareness programs.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.26, A.5.27",
+        "nist_ref": "NIST CSF 2.0 – RS.AN (Incident Analysis)",
+        "cis_ref": "CIS Controls v8 – Control 17.8, 17.9",
+        "nis2_ref": "NIS2 – Article 21(2)(b)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RS_Q4",
+        "applies_if_score_below": 3,
+        "title": "Conduct periodic incident response exercises",
+        "description": "Incident response capability is untested, leading to uncertainty during real incidents.",
+        "improvement_tips": "Plan and conduct at least annual IR exercises (tabletop or technical). Evaluate timing, decision-making and communication effectiveness. Document lessons learned and integrate into IRP updates.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.24",
+        "nist_ref": "NIST CSF 2.0 – RS.MA (Incident Management), ID.IM (Improvement)",
+        "cis_ref": "CIS Controls v8 – Control 17.7",
+        "nis2_ref": "NIS2 – Article 21(2)(b)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RS_Q5",
+        "applies_if_score_below": 3,
+        "title": "Ensure compliance with regulatory and partner reporting requirements",
+        "description": "Regulatory or partner notification obligations are unclear or not met within required timelines.",
+        "improvement_tips": "Define criteria and time limits for notifying authorities and partners (e.g., NIS2 within 24 h initial, 72 h detailed). Prepare templates for rapid communication and maintain contact lists of relevant stakeholders.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.5, A.5.6",
+        "nist_ref": "NIST CSF 2.0 – RS.CO (Incident Response Reporting and Communication)",
+        "cis_ref": "CIS Controls v8 – Control 17.2, 17.6",
+        "nis2_ref": "NIS2 – Article 23(1) and 23(4)",
+        "priority": "high"
+      },
+      {
+        "question_id": "RS_Q6",
+        "applies_if_score_below": 3,
+        "title": "Track and implement corrective actions from incidents and exercises",
+        "description": "Lessons learned are identified but not acted upon, reducing continuous improvement of the response process.",
+        "improvement_tips": "Create a tracking log for all post-incident and exercise recommendations. Assign owners, deadlines and verify completion. Review implementation status in management reviews.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.27",
+        "nist_ref": "NIST CSF 2.0 – ID.IM (Improvement)",
+        "cis_ref": "CIS Controls v8 – Control 17.8",
+        "nis2_ref": "NIS2 – Article 21(2)(b) and 21(2)(f)",
+        "priority": "medium"
+      }
+    ]
+  }

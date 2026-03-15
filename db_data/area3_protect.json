@@ -1,0 +1,126 @@
+{
+  "area_id": "PROTECT",
+  "name": "Protect – Access Control, Awareness & Data Protection",
+    "weight": 1.15,
+    "description": "Implementation of safeguards to ensure proper access control, user awareness, data protection and resilience of supporting technology.",
+  "maturity_scale": {
+    "0": "Not implemented – no practices in place.",
+    "1": "Ad hoc – informal practices, not documented or consistent.",
+    "2": "Partially defined – some documented practices, applied inconsistently.",
+    "3": "Defined and implemented – documented, communicated, and generally followed.",
+    "4": "Measured and monitored – effectiveness is regularly reviewed and improved.",
+    "5": "Optimized – practices are proactive, continuously improved, and aligned with business strategy."
+  },
+  "questions": [
+    {
+        "question_id": "PR_Q1",
+        "text": "Are user accounts and access rights granted according to the principle of least privilege and regularly reviewed?",
+        "description": "Assesses whether access rights are based on job requirements, approved, and periodically reviewed to remove unnecessary privileges.",
+        "weight": 1.15
+    },
+    {
+        "question_id": "PR_Q2",
+        "text": "Are strong authentication mechanisms (e.g., MFA) implemented for privileged and remote access?",
+        "description": "Evaluates whether the organization enforces multi-factor authentication or equivalent safeguards for critical systems and remote connections.",
+        "weight": 1.10
+    },
+    {
+        "question_id": "PR_Q3",
+        "text": "Are employees and contractors regularly trained and made aware of cybersecurity risks and best practices?",
+        "description": "Checks whether there is a structured, recurring security awareness and training program addressing phishing, password hygiene and incident reporting.",
+        "weight": 0.95
+    },
+    {
+        "question_id": "PR_Q4",
+        "text": "Are there defined processes for secure data handling, storage and disposal based on classification?",
+        "description": "Assesses whether sensitive information is protected throughout its lifecycle and securely destroyed when no longer needed.",
+        "weight": 0.90
+    },
+    {
+        "question_id": "PR_Q5",
+        "text": "Are backup copies of critical data created, protected and periodically tested for recovery?",
+        "description": "Evaluates whether backup and recovery processes are defined, secure and regularly validated through restoration tests.",
+        "weight": 1.05
+    },
+    {
+        "question_id": "PR_Q6",
+        "text": "Are protective technologies (e.g., firewalls, endpoint protection, patch management) implemented and maintained?",
+        "description": "Checks whether core preventive technologies are deployed, configured and kept up to date to reduce attack surface.",
+        "weight": 0.85
+    }
+  ],
+  "recommendations": [
+    {
+      "question_id": "PR_Q1",
+      "applies_if_score_below": 3,
+      "title": "Enforce least-privilege access management and periodic reviews",
+      "description": "Access rights are not consistently assigned or reviewed. Excess privileges increase risk of data breaches and unauthorized actions.",
+      "improvement_tips": "Implement role-based access control (RBAC) ensuring users have only the permissions necessary for their duties. Require documented approval for new accounts and privilege changes. Review access lists at least quarterly and remove unused accounts promptly.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.15, A.5.18",
+      "nist_ref": "NIST CSF 2.0 – PR.AA (Identity Management, Authentication, and Access Control)",
+      "cis_ref": "CIS Controls v8 – Control 6.1, 6.2, 6.8",
+      "nis2_ref": "NIS2 – Article 21(2)(i)",
+      "priority": "high"
+    },
+    {
+      "question_id": "PR_Q2",
+      "applies_if_score_below": 3,
+      "title": "Implement strong multi-factor authentication for critical systems",
+      "description": "Critical or remote access lacks strong authentication, increasing risk of credential compromise.",
+      "improvement_tips": "Deploy multi-factor authentication (MFA) for all privileged and remote accounts. Use phishing-resistant methods where possible. Apply secure password policies and monitor for failed login anomalies.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.17, A.8.5",
+      "nist_ref": "NIST CSF 2.0 – PR.AA (Identity Management, Authentication, and Access Control)",
+      "cis_ref": "CIS Controls v8 – Control 6.3, 6.4, 6.5",
+      "nis2_ref": "NIS2 – Article 21(2)(j)",
+      "priority": "high"
+    },
+    {
+      "question_id": "PR_Q3",
+      "applies_if_score_below": 3,
+      "title": "Establish recurring cybersecurity awareness and training",
+      "description": "Employees are not regularly trained or aware of cybersecurity threats, increasing likelihood of social-engineering incidents.",
+      "improvement_tips": "Implement annual mandatory awareness training covering phishing, social engineering, password security and reporting procedures. Conduct periodic phishing simulations and track participation metrics to improve engagement.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.6.3",
+      "nist_ref": "NIST CSF 2.0 – PR.AT (Awareness and Training)",
+      "cis_ref": "CIS Controls v8 – Control 14.1, 14.2, 14.3",
+      "nis2_ref": "NIS2 – Article 21(2)(g)",
+      "priority": "medium"
+    },
+    {
+      "question_id": "PR_Q4",
+      "applies_if_score_below": 3,
+      "title": "Define and enforce secure data handling and disposal procedures",
+      "description": "Sensitive data handling practices are inconsistent, risking accidental exposure or data leakage.",
+      "improvement_tips": "Develop data handling procedures aligned with information classification. Include secure storage, transfer, encryption and disposal methods. Use secure wipe or destruction services for media containing confidential data.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.10, A.8.12",
+      "nist_ref": "NIST CSF 2.0 – PR.DS (Data Security)",
+      "cis_ref": "CIS Controls v8 – Control 3.4, 3.5",
+      "nis2_ref": "NIS2 – Article 21(2)(a)",
+      "priority": "medium"
+    },
+    {
+      "question_id": "PR_Q5",
+      "applies_if_score_below": 3,
+      "title": "Implement reliable data backup and recovery validation",
+      "description": "Backups are incomplete, insecure or untested, risking data loss during incidents.",
+      "improvement_tips": "Define backup frequency and retention policies for critical data. Store copies off-site or in immutable storage. Encrypt backups and perform periodic restoration tests to verify integrity and recovery time objectives.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.13",
+      "nist_ref": "NIST CSF 2.0 – PR.DS (Data Security), PR.IR (Technology Infrastructure Resilience)",
+      "cis_ref": "CIS Controls v8 – Control 11.3, 11.5",
+      "nis2_ref": "NIS2 – Article 21(2)(c)",
+      "priority": "high"
+    },
+    {
+      "question_id": "PR_Q6",
+      "applies_if_score_below": 3,
+      "title": "Maintain and monitor core protective technologies",
+      "description": "Protective technologies such as firewalls, endpoint protection or patch management are missing or outdated, reducing overall defense capability.",
+      "improvement_tips": "Deploy and centrally manage key protective technologies including firewalls, anti-malware, EDR/XDR and patch-management systems. Define maintenance and monitoring responsibilities and ensure timely updates and alert review.",
+      "iso_ref": "ISO/IEC 27001:2022 – Annex A.8.7, A.8.8",
+      "nist_ref": "NIST CSF 2.0 – PR.PS (Platform Security)",
+      "cis_ref": "CIS Controls v8 – Control 4.4, 7.3, 10.1",
+      "nis2_ref": "NIS2 – Article 21(2)(e)",
+      "priority": "high"
+    }
+  ]
+}

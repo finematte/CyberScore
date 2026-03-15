@@ -1,0 +1,366 @@
+{
+  "maturity_scale": {
+    "0": "Nie wdrożono – brak praktyk.",
+    "1": "Doraźnie – praktyki nieformalne, niedokumentowane i niespójne.",
+    "2": "Częściowo zdefiniowane – część praktyk jest udokumentowana, stosowana niespójnie.",
+    "3": "Zdefiniowane i wdrożone – udokumentowane, zakomunikowane i na ogół przestrzegane.",
+    "4": "Mierzone i monitorowane – skuteczność jest regularnie analizowana i doskonalona.",
+    "5": "Zoptymalizowane – praktyki proaktywne, stale doskonalone i zbieżne ze strategią."
+  },
+  "areas": {
+    "GOVERN": {
+      "name": "Nadzór i zarządzanie ryzykiem",
+      "description": "Nadzór, role i odpowiedzialności, polityki oraz włączenie cyberbezpieczeństwa do zarządzania firmą i ryzykiem."
+    },
+    "IDENTIFY": {
+      "name": "Identyfikacja – aktywa, ryzyko i kontekst biznesowy",
+      "description": "Zrozumienie kontekstu biznesowego, aktywów, zależności i ryzyk cyberbezpieczeństwa w celu podejmowania decyzji opartych na ryzyku."
+    },
+    "PROTECT": {
+      "name": "Ochrona – kontrola dostępu, świadomość i ochrona danych",
+      "description": "Wdrożenie środków zapewniających właściwą kontrolę dostępu, świadomość użytkowników, ochronę danych i odporność technologii."
+    },
+    "DETECT": {
+      "name": "Wykrywanie – monitorowanie, rejestrowanie i analiza anomalii",
+      "description": "Możliwości wykrywania zdarzeń i anomalii w cyberbezpieczeństwie poprzez monitorowanie, rejestrowanie i analizę."
+    },
+    "RESPOND": {
+      "name": "Reagowanie – incydenty i raportowanie",
+      "description": "Procesy i możliwości skutecznego reagowania na incydenty, ograniczania skutków, komunikacji i spełniania obowiązków raportowania."
+    },
+    "RECOVER": {
+      "name": "Odzyskiwanie – ciągłość biznesowa i odporność",
+      "description": "Możliwości przywracania usług, utrzymania ciągłości biznesowej i poprawy odporności po incydencie lub zakłóceniu."
+    }
+  },
+  "questions": {
+    "GOV_Q1": {
+      "text": "Czy organizacja ma formalnie zatwierdzoną politykę cyberbezpieczeństwa / bezpieczeństwa informacji?",
+      "description": "Sprawdza, czy istnieje udokumentowana i formalnie zatwierdzona polityka określająca cele, zakres i zasady ochrony informacji i systemów."
+    },
+    "GOV_Q2": {
+      "text": "Czy role i odpowiedzialności w zakresie cyberbezpieczeństwa są jasno zdefiniowane i przypisane (np. CISO, pełnomocnik ds. bezpieczeństwa, właściciele systemów)?",
+      "description": "Ocenia, czy odpowiedzialności są explicite przypisane, udokumentowane i zrozumiane w organizacji."
+    },
+    "GOV_Q3": {
+      "text": "Czy kierownictwo regularnie przegląda i nadzoruje postawę cyberbezpieczeństwa organizacji?",
+      "description": "Sprawdza zaangażowanie kierownictwa w przegląd ryzyk, wskaźników i kluczowych inicjatyw doskonalenia."
+    },
+    "GOV_Q4": {
+      "text": "Czy cyberbezpieczeństwo jest włączone do ogólnego procesu zarządzania ryzykiem w przedsiębiorstwie (ERM)?",
+      "description": "Sprawdza, czy ryzyka cyberbezpieczeństwa są oceniane, priorytetyzowane i zarządzane w ramach ERM."
+    },
+    "GOV_Q5": {
+      "text": "Czy w relacjach z dostawcami i usługodawcami zewnętrznymi obowiązują formalne wymagania i nadzór w zakresie cyberbezpieczeństwa?",
+      "description": "Ocenia, czy organizacja definiuje i monitoruje wymagania cyberbezpieczeństwa wobec dostawców, chmury i usług zewnętrznych."
+    },
+    "GOV_Q6": {
+      "text": "Czy wymagania prawne, regulacyjne i umowne w zakresie cyberbezpieczeństwa (w tym NIS2, jeśli ma zastosowanie) są zidentyfikowane i regularnie przeglądane?",
+      "description": "Ocenia, czy organizacja zna i śledzi obowiązki prawne/regulacyjne/umowne i odzwierciedla je w zarządzaniu."
+    },
+    "ID_Q1": {
+      "text": "Czy istnieje aktualny rejestr krytycznych aktywów informacyjnych (systemy, aplikacje, dane, urządzenia)?",
+      "description": "Sprawdza, czy organizacja utrzymuje aktualny rejestr kluczowych aktywów istotnych dla cyberbezpieczeństwa."
+    },
+    "ID_Q2": {
+      "text": "Czy aktywa informacyjne są klasyfikowane według wrażliwości i krytyczności biznesowej?",
+      "description": "Ocenia stosowanie schematu klasyfikacji (np. publiczne, wewnętrzne, poufne) i poziomów krytyczności."
+    },
+    "ID_Q3": {
+      "text": "Czy udokumentowano zrozumienie procesów biznesowych organizacji i ich zależności od systemów IT i danych?",
+      "description": "Sprawdza, czy kluczowe procesy biznesowe i ich zależności od technologii są udokumentowane."
+    },
+    "ID_Q4": {
+      "text": "Czy ryzyka cyberbezpieczeństwa są regularnie identyfikowane, oceniane i rejestrowane w rejestrze ryzyk?",
+      "description": "Sprawdza powtarzalny proces identyfikacji, oceny i rejestrowania ryzyk w ustrukturyzowanej formie."
+    },
+    "ID_Q5": {
+      "text": "Czy decyzje dotyczące postępowania z ryzykiem (akceptacja, ograniczenie, przeniesienie, unikanie) są udokumentowane i zatwierdzane przez właściwych właścicieli ryzyka?",
+      "description": "Ocenia, czy decyzje są świadome, rejestrowane i zatwierdzane przez odpowiedzialnych, a nie podejmowane nieformalnie."
+    },
+    "ID_Q6": {
+      "text": "Czy zależności od dostawców zewnętrznych i podmiotów trzecich są zidentyfikowane i uwzględniane w ocenie ryzyka?",
+      "description": "Sprawdza, czy ryzyka związane z outsourcingiem, chmurą i dostawcami są uwzględniane w zarządzaniu ryzykiem."
+    },
+    "PR_Q1": {
+      "text": "Czy konta użytkowników i uprawnienia dostępu są przyznawane według zasady najmniejszych uprawnień i regularnie przeglądane?",
+      "description": "Ocenia, czy uprawnienia wynikają z obowiązków, są zatwierdzane i okresowo weryfikowane."
+    },
+    "PR_Q2": {
+      "text": "Czy dla dostępu uprzywilejowanego i zdalnego wdrożono silne mechanizmy uwierzytelniania (np. MFA)?",
+      "description": "Sprawdza stosowanie uwierzytelniania wieloskładnikowego lub równoważnych środków dla systemów krytycznych i dostępu zdalnego."
+    },
+    "PR_Q3": {
+      "text": "Czy pracownicy i współpracownicy są regularnie szkoleni i świadomi ryzyk oraz dobrych praktyk w zakresie cyberbezpieczeństwa?",
+      "description": "Sprawdza istnienie strukturyzowanego, cyklicznego programu świadomości i szkoleń (phishing, hasła, zgłaszanie incydentów)."
+    },
+    "PR_Q4": {
+      "text": "Czy istnieją zdefiniowane procesy bezpiecznego obchodzenia się z danymi, przechowywania i usuwania w zależności od klasyfikacji?",
+      "description": "Ocenia ochronę wrażliwych informacji w całym cyklu życia i bezpieczne niszczenie po zakończeniu używania."
+    },
+    "PR_Q5": {
+      "text": "Czy tworzy się kopie zapasowe krytycznych danych, są one chronione i okresowo testowane pod kątem odzyskiwania?",
+      "description": "Ocenia, czy procesy backupu i odzyskiwania są zdefiniowane, bezpieczne i weryfikowane testami przywracania."
+    },
+    "PR_Q6": {
+      "text": "Czy technologie ochronne (np. zapory, ochrona punktów końcowych, zarządzanie poprawkami) są wdrożone i utrzymywane?",
+      "description": "Sprawdza wdrożenie i aktualność kluczowych technologii prewencyjnych w celu ograniczenia powierzchni ataku."
+    },
+    "DE_Q1": {
+      "text": "Czy zdarzenia bezpieczeństwa i dzienniki systemowe z systemów krytycznych są zbierane i przechowywane?",
+      "description": "Sprawdza, czy rejestrowanie jest włączone dla systemów krytycznych i bezpiecznie przechowywane do analizy."
+    },
+    "DE_Q2": {
+      "text": "Czy dzienniki i alerty są regularnie przeglądane w celu wykrycia potencjalnych incydentów lub anomalii?",
+      "description": "Ocenia, czy zespół lub narzędzia rutynowo analizują dzienniki i alerty pod kątem podejrzanej aktywności."
+    },
+    "DE_Q3": {
+      "text": "Czy wdrożono scentralizowane monitorowanie (np. SIEM) do korelacji zdarzeń z wielu systemów?",
+      "description": "Sprawdza agregację i korelację danych z wielu systemów w celu wykrywania złożonych ataków."
+    },
+    "DE_Q4": {
+      "text": "Czy zdefiniowano wzorce normalnej aktywności sieciowej i użytkowników oraz wykorzystuje się je do wykrywania anomalii?",
+      "description": "Ocenia zdefiniowanie „normy” w celu wsparcia wykrywania opartego na anomaliach i analityki behawioralnej."
+    },
+    "DE_Q5": {
+      "text": "Czy systemy wykrywania i alerty są okresowo testowane i dostrajane pod kątem dokładności?",
+      "description": "Ocenia regularny przegląd, dostrajanie i walidację w celu ograniczenia fałszywych alarmów i przeoczeń."
+    },
+    "DE_Q6": {
+      "text": "Czy wykryte zdarzenia cyberbezpieczeństwa są klasyfikowane, rejestrowane i przekazywane właściwym interesariuszom?",
+      "description": "Sprawdza rejestrowanie, kategoryzację według ważności i eskalację do zespołu reagowania."
+    },
+    "RS_Q1": {
+      "text": "Czy istnieje formalnie udokumentowany i zatwierdzony plan reagowania na incydenty (IRP)?",
+      "description": "Sprawdza istnienie pisemnego, zatwierdzonego planu opisującego wykrywanie, analizę, izolację, usunięcie i odzyskiwanie."
+    },
+    "RS_Q2": {
+      "text": "Czy role, odpowiedzialności i kanały komunikacji w zakresie reagowania na incydenty są jasno zdefiniowane?",
+      "description": "Ocenia, czy personel wie, do kogo się zwrócić, jakie są ścieżki eskalacji i kto za co odpowiada."
+    },
+    "RS_Q3": {
+      "text": "Czy incydenty cyberbezpieczeństwa są rejestrowane, klasyfikowane i analizowane pod kątem przyczyn i wniosków?",
+      "description": "Sprawdza udokumentowanie incydentów w ustrukturyzowany sposób oraz przeprowadzanie analiz poreakcyjnych."
+    },
+    "RS_Q4": {
+      "text": "Czy ćwiczenia lub symulacje reagowania na incydenty są okresowo przeprowadzane?",
+      "description": "Ocenia testowanie planu IRP poprzez ćwiczenia stolikowe lub techniczne w celu oceny gotowości."
+    },
+    "RS_Q5": {
+      "text": "Czy istnieje zdefiniowany proces terminowego powiadamiania regulatorów, partnerów i poszkodowanych (np. raportowanie NIS2)?",
+      "description": "Ocenia spełnianie obowiązków raportowania zewnętrznego i koordynację z interesariuszami."
+    },
+    "RS_Q6": {
+      "text": "Czy ulepszenia w zakresie reagowania są śledzone i wdrażane po przeglądach lub ćwiczeniach?",
+      "description": "Sprawdza systematyczne wdrażanie i weryfikację wniosków oraz działań korygujących z incydentów i ćwiczeń."
+    },
+    "RC_Q1": {
+      "text": "Czy istnieje formalnie udokumentowany i zatwierdzony plan ciągłości biznesowej (BCP) obejmujący incydenty cyberbezpieczeństwa?",
+      "description": "Sprawdza, czy planowanie ciągłości obejmuje IT, dane i zakłócenia cyberbezpieczeństwa oraz definiuje cele odzyskiwania."
+    },
+    "RC_Q2": {
+      "text": "Czy dla krytycznych systemów i procesów zdefiniowano cele czasu odzyskania (RTO) i punktu odzyskania (RPO)?",
+      "description": "Ocenia ustalenie mierzalnych celów odzyskiwania w celu priorytetyzacji działań przywracania."
+    },
+    "RC_Q3": {
+      "text": "Czy procedury backupu i odzyskiwania są okresowo testowane w celu weryfikacji skuteczności?",
+      "description": "Sprawdza testowanie przywracania z kopii zapasowych w celu potwierdzenia odzyskania w ramach RTO/RPO."
+    },
+    "RC_Q4": {
+      "text": "Czy odpowiedzialności za ciągłość biznesową i odzyskiwanie po awarii są przypisane i zakomunikowane?",
+      "description": "Ocenia zdefiniowanie i zrozumienie ról i odpowiedzialności za odzyskiwanie i ciągłość."
+    },
+    "RC_Q5": {
+      "text": "Czy po incydencie przegląda się działania odzyskiwania w celu identyfikacji ulepszeń odporności i gotowości?",
+      "description": "Ocenia systematyczną analizę i wdrażanie wniosków po odzyskiwaniu."
+    },
+    "RC_Q6": {
+      "text": "Czy odporność jest włączona do planowania strategicznego, zarządzania dostawcami i projektowania infrastruktury?",
+      "description": "Sprawdza, czy zasady odporności i ciągłości są osadzone w planowaniu biznesowym i IT, a nie traktowane oddzielnie."
+    }
+  },
+  "recommendations": {
+    "GOV_Q1": {
+      "title": "Wprowadź i zatwierdź formalną politykę cyberbezpieczeństwa",
+      "description": "Brak formalnie zatwierdzonej polityki cyberbezpieczeństwa/bezpieczeństwa informacji utrudnia egzekwowanie spójnych praktyk w organizacji.",
+      "improvement_tips": "Przygotuj politykę obejmującą zakres, cele, role, dopuszczalne użytkowanie, kontrolę dostępu, zgłaszanie incydentów i minimalne wymagania techniczne. Zyskaj zatwierdzenie kierownictwa i zakomunikuj politykę wszystkim pracownikom. Przeglądaj i aktualizuj politykę co najmniej raz w roku lub po istotnych zmianach."
+    },
+    "GOV_Q2": {
+      "title": "Zdefiniuj i udokumentuj role i odpowiedzialności w zakresie cyberbezpieczeństwa",
+      "description": "Role i odpowiedzialności nie są jasno zdefiniowane ani zakomunikowane, co prowadzi do luk w odpowiedzialności i niejednoznaczności decyzji.",
+      "improvement_tips": "Zidentyfikuj kluczowe role (np. CISO, pełnomocnik ds. bezpieczeństwa, właściciele systemów). Udokumentuj odpowiedzialności w opisach stanowisk lub macierzach RACI. Zapewnij komunikację i akceptację przez kierownictwo. Przeglądaj przy zmianach w organizacji."
+    },
+    "GOV_Q3": {
+      "title": "Zwiększ nadzór kierownictwa nad cyberbezpieczeństwem",
+      "description": "Kierownictwo nie przegląda regularnie ryzyk, wyników ani planów doskonalenia, co obniża widoczność i priorytet cyberbezpieczeństwa.",
+      "improvement_tips": "Wprowadź regularne (np. kwartalne) spotkania przeglądowe z kierownictwem. Prezentuj kluczowe ryzyka, incydenty, KPI i postępy działań. Włącz tematykę cyberbezpieczeństwa do przeglądów i decyzji zarządczych."
+    },
+    "GOV_Q4": {
+      "title": "Włącz cyberbezpieczeństwo do zarządzania ryzykiem w przedsiębiorstwie (ERM)",
+      "description": "Ryzyka cyberbezpieczeństwa nie są konsekwentnie uwzględniane w procesie ERM, co może prowadzić do ich niedoceniania.",
+      "improvement_tips": "Uwzględnij ryzyka cyberbezpieczeństwa w rejestrze ryzyk i procesie ERM. Zdefiniuj właścicieli ryzyk, kryteria prawdopodobieństwa i wpływu. Dostosuj apetyt na ryzyko i plany postępowania do celów biznesowych. Przeglądaj ryzyka cyber wraz z innymi ryzykami strategicznymi i operacyjnymi."
+    },
+    "GOV_Q5": {
+      "title": "Wzmocnij nadzór cyberbezpieczeństwa w relacjach z dostawcami i usługodawcami",
+      "description": "Wymagania wobec dostawców i usługodawców nie są jasno zdefiniowane ani monitorowane, co zwiększa ryzyko łańcucha dostaw.",
+      "improvement_tips": "Zdefiniuj minimalne wymagania cyberbezpieczeństwa dla dostawców, zwłaszcza z dostępem do systemów krytycznych lub danych. Uwzględnij klauzule w umowach (powiadomienia o incydentach, kontrola dostępu, ochrona danych). Okresowo weryfikuj zgodność (ankiety, audyty, certyfikaty)."
+    },
+    "GOV_Q6": {
+      "title": "Systematycznie zarządzaj wymaganiami prawnymi, regulacyjnymi i umownymi",
+      "description": "Wymagania prawne, regulacyjne i umowne (w tym NIS2) nie są w pełni zidentyfikowane, śledzone ani odzwierciedlone w politykach i kontrolach.",
+      "improvement_tips": "Zidentyfikuj obowiązujące przepisy i zobowiązania umowne (NIS2, przepisy branżowe, wymagania klientów). Prowadź rejestr zobowiązań i mapowanie na polityki i kontrolę. Przeglądaj rejestr regularnie z prawnymi/compliance i aktualizuj dokumenty."
+    },
+    "ID_Q1": {
+      "title": "Zbuduj i utrzymuj rejestr krytycznych aktywów informacyjnych",
+      "description": "Brak pełnego i aktualnego rejestru utrudnia określenie, co i w jakim stopniu chronić.",
+      "improvement_tips": "Utwórz scentralizowany rejestr kluczowych aktywów (systemy, aplikacje, bazy, urządzenia, repozytoria danych). Rejestruj co najmniej właściciela, lokalizację, cel i krytyczność. Zacznij od najbardziej krytycznych systemów. Przeglądaj i aktualizuj rejestr regularnie (np. kwartalnie) i przy istotnych zmianach."
+    },
+    "ID_Q2": {
+      "title": "Wprowadź klasyfikację informacji i zasady obchodzenia się z nimi",
+      "description": "Aktywa nie są konsekwentnie klasyfikowane według wrażliwości i krytyczności, co może rozchylać kontrolę od rzeczywistej wagi danych.",
+      "improvement_tips": "Zdefiniuj prosty schemat klasyfikacji (np. Publiczne, Wewnętrzne, Poufne, Zastrzeżone). Przypisz poziomy do kluczowych aktywów. Udokumentuj zasady obchodzenia się z każdą klasą (przechowywanie, udostępnianie, dostęp, usuwanie) i zakomunikuj pracownikom. Stosuj etykiety lub metadane tam, gdzie to możliwe."
+    },
+    "ID_Q3": {
+      "title": "Udokumentuj kluczowe procesy biznesowe i ich zależności od IT",
+      "description": "Brak jasnego, udokumentowanego obrazu zależności procesów od systemów i danych ogranicza priorytetyzację ochrony i odzyskiwania.",
+      "improvement_tips": "Zidentyfikuj najważniejsze procesy (np. realizacja zamówień, produkcja, obsługa klienta) i udokumentuj, od jakich systemów i danych zależą. Ujmij co najmniej właściciela procesu, systemy wsparcia i wpływ niedostępności. Wykorzystaj to do priorytetyzacji środków cyberbezpieczeństwa i ciągłości."
+    },
+    "ID_Q4": {
+      "title": "Wprowadź ustrukturyzowany proces oceny ryzyka cyberbezpieczeństwa",
+      "description": "Ryzyka nie są identyfikowane i oceniane w powtarzalny sposób; informacje są rozproszone lub nie rejestrowane centralnie.",
+      "improvement_tips": "Zdefiniuj metodologię oceny ryzyka (źródła ryzyk, kryteria prawdopodobieństwa i wpływu). Przeprowadzaj regularne oceny dla krytycznych aktywów i procesów. Rejestruj ryzyka, oceny i proponowane działania w rejestrze ryzyk. Przeglądaj i aktualizuj rejestr okresowo oraz po incydentach lub zmianach."
+    },
+    "ID_Q5": {
+      "title": "Sformalizuj i udokumentuj decyzje dotyczące postępowania z ryzykiem",
+      "description": "Decyzje (akceptacja, ograniczenie, przeniesienie, unikanie) nie są konsekwentnie udokumentowane ani zatwierdzane przez właścicieli ryzyk.",
+      "improvement_tips": "Dla każdego istotnego ryzyka udokumentuj wybraną opcję, uzasadnienie, właściciela i terminy działań ograniczających. Zapewnij formalne zatwierdzenie przez właścicieli ryzyk. Regularnie przeglądaj status i postępy."
+    },
+    "ID_Q6": {
+      "title": "Uwzględnij zależności od dostawców zewnętrznych w zarządzaniu ryzykiem",
+      "description": "Zależności od dostawców zewnętrznych nie są w pełni zidentyfikowane ani oceniane pod kątem cyberbezpieczeństwa.",
+      "improvement_tips": "Zidentyfikuj kluczowych dostawców wspierających krytyczne systemy lub przetwarzających wrażliwe dane. Uwzględnij ich w rejestrze aktywów i ocenach ryzyka. Oceniaj ryzyka związane z dostawcami i zdefiniuj odpowiednie kontrolę (klauzule w umowach, due diligence, certyfikaty, okresowe oceny)."
+    },
+    "PR_Q1": {
+      "title": "Wymuszaj zasadę najmniejszych uprawnień i okresowe przeglądy dostępu",
+      "description": "Uprawnienia nie są konsekwentnie przypisywane ani przeglądane; nadmiar uprawnień zwiększa ryzyko naruszeń.",
+      "improvement_tips": "Wdroż kontrolę dostępu opartą na rolach (RBAC), tak aby użytkownicy mieli tylko niezbędne uprawnienia. Wymagaj udokumentowanej akceptacji dla nowych kont i zmian uprawnień. Przeglądaj listy dostępu co najmniej kwartalnie i usuń nieużywane konta."
+    },
+    "PR_Q2": {
+      "title": "Wdroż silne uwierzytelnianie wieloskładnikowe (MFA) dla systemów krytycznych",
+      "description": "Brak silnego uwierzytelniania dla dostępu krytycznego lub zdalnego zwiększa ryzyko przejęcia danych logowania.",
+      "improvement_tips": "Wdroż MFA dla wszystkich kont uprzywilejowanych i zdalnych. Tam gdzie to możliwe stosuj metody odporne na phishing. Zastosuj polityki haseł i monitoruj anomalie logowań."
+    },
+    "PR_Q3": {
+      "title": "Wprowadź cykliczną świadomość i szkolenia z cyberbezpieczeństwa",
+      "description": "Pracownicy nie są regularnie szkoleni ani świadomi zagrożeń, co zwiększa ryzyko incydentów socjotechnicznych.",
+      "improvement_tips": "Wprowadź obowiązkowe szkolenia roczne z zakresu phishingu, socjotechniki, haseł i procedur zgłaszania. Przeprowadzaj okresowe symulacje phishingu i mierz uczestnictwo."
+    },
+    "PR_Q4": {
+      "title": "Zdefiniuj i egzekwuj procedury bezpiecznego obchodzenia się z danymi i ich usuwania",
+      "description": "Niespójne praktyki obchodzenia się z danymi wrażliwymi zwiększają ryzyko przypadkowego ujawnienia.",
+      "improvement_tips": "Opracuj procedury zgodne z klasyfikacją informacji (bezpieczne przechowywanie, przekazywanie, szyfrowanie, usuwanie). Stosuj bezpieczne usuwanie lub niszczenie nośników z danymi poufnymi."
+    },
+    "PR_Q5": {
+      "title": "Wdroż niezawodny backup i weryfikację odzyskiwania",
+      "description": "Kopie zapasowe są niekompletne, niebezpieczne lub nietestowane, co grozi utratą danych przy incydencie.",
+      "improvement_tips": "Zdefiniuj częstotliwość i politykę przechowywania kopii dla krytycznych danych. Przechowuj kopie poza siedzibą lub w magazynie niezmiennym. Szyfruj kopie i przeprowadzaj okresowe testy przywracania w celu weryfikacji RTO/RPO."
+    },
+    "PR_Q6": {
+      "title": "Utrzymuj i monitoruj kluczowe technologie ochronne",
+      "description": "Brak lub przestarzałe zapory, ochrona punktów końcowych lub zarządzanie poprawkami obniża zdolność obronną.",
+      "improvement_tips": "Wdroż i centralnie zarządzaj zaporami, antymalware, EDR/XDR i systemami zarządzania poprawkami. Zdefiniuj odpowiedzialności za utrzymanie i monitorowanie oraz zapewnij terminowe aktualizacje i przegląd alertów."
+    },
+    "DE_Q1": {
+      "title": "Wdroż scentralizowane zbieranie i bezpieczne przechowywanie dzienników",
+      "description": "Systemy krytyczne nie konsekwentnie generują ani nie przechowują dzienników bezpieczeństwa, co ogranicza możliwości analizy i wykrywania.",
+      "improvement_tips": "Włącz rejestrowanie na wszystkich systemach krytycznych i urządzeniach sieciowych. Przekieruj dzienniki do scentralizowanego, chronionego repozytorium. Zdefiniuj okresy przechowywania (np. 90–180 dni) i ogranicz dostęp do upoważnionych osób."
+    },
+    "DE_Q2": {
+      "title": "Wprowadź rutynowy przegląd dzienników i alertów",
+      "description": "Dzienniki i alerty są zbierane, ale rzadko analizowane, co opóźnia wykrywanie incydentów.",
+      "improvement_tips": "Zdefiniuj odpowiedzialności i częstotliwość przeglądów. Wykorzystuj automatyzację lub pulpity do wyróżniania anomalii i priorytetyzacji. Szkol analityków w rozpoznawaniu wzorców świadczących o naruszeniu."
+    },
+    "DE_Q3": {
+      "title": "Wdroż scentralizowane monitorowanie lub SIEM",
+      "description": "Dane zdarzeń są rozproszone, brak wspólnego obrazu, co utrudnia wykrywanie złożonych ataków.",
+      "improvement_tips": "Wdroż SIEM lub równoważne scentralizowane zarządzanie dziennikami. Zintegruj kluczowe źródła (zapory, punkty końcowe, serwery, tożsamość). Skonfiguruj reguły korelacji dla typowych ataków i zapewnij routing alertów do zespołów."
+    },
+    "DE_Q4": {
+      "title": "Zdefiniuj wzorce zachowań i włącz wykrywanie anomalii",
+      "description": "Anomalie pozostają niewykryte, ponieważ nie zdefiniowano ani nie monitoruje się normy.",
+      "improvement_tips": "Opracuj wskaźniki wzorcowe dla normalnego zachowania systemów, sieci i użytkowników. Wykorzystuj narzędzia z funkcjami wykrywania anomalii lub analityki behawioralnej. Aktualizuj wzorce okresowo."
+    },
+    "DE_Q5": {
+      "title": "Regularnie testuj i dostrajaj możliwości wykrywania",
+      "description": "Nadmiar fałszywych alarmów lub przeoczenia wynikają z nieaktualnych lub nietestowanych konfiguracji.",
+      "improvement_tips": "Przeprowadzaj okresowe dostrajanie reguł SIEM, sygnatur IDS/IPS i polityk EDR. Weryfikuj skuteczność poprzez symulowane ataki lub ćwiczenia red team. Dokumentuj wyniki dostrajania."
+    },
+    "DE_Q6": {
+      "title": "Sformalizuj procedury klasyfikacji i komunikacji zdarzeń",
+      "description": "Wykryte zdarzenia nie są konsekwentnie klasyfikowane ani eskalowane, co opóźnia reakcję.",
+      "improvement_tips": "Zdefiniuj poziomy ważności (np. Niski, Średni, Wysoki) i ścieżki eskalacji. Udokumentuj rejestrowanie, kategoryzację i przekazywanie do zespołu reagowania. Zapewnij możliwość śledzenia od wykrycia do zamknięcia."
+    },
+    "RS_Q1": {
+      "title": "Opracuj i zatwierdź formalny plan reagowania na incydenty (IRP)",
+      "description": "Brak udokumentowanego planu reagowania prowadzi do niespójnych reakcji na zdarzenia.",
+      "improvement_tips": "Utwórz formalny IRP definiujący fazy wykrywania, analizy, izolacji, usunięcia i odzyskiwania. Uwzględnij komunikację, raportowanie i eskalację. Zyskaj zatwierdzenie kierownictwa i przeglądaj plan co najmniej raz w roku."
+    },
+    "RS_Q2": {
+      "title": "Zdefiniuj role i strukturę komunikacji w reagowaniu na incydenty",
+      "description": "Niejasne odpowiedzialności i kanały komunikacji powodują opóźnienia i zamieszanie.",
+      "improvement_tips": "Przypisz role (kierownik incydentu, lider komunikacji, lider techniczny, prawny/compliance). Udokumentuj macierz eskalacji i listy kontaktów. Szkol personel, kiedy i jak zgłaszać incydenty."
+    },
+    "RS_Q3": {
+      "title": "Rejestruj i analizuj incydenty pod kątem przyczyn i ulepszeń",
+      "description": "Incydenty są obsługiwane, ale bez systematycznej analizy, co pomija szanse zapobiegania powtórkom.",
+      "improvement_tips": "Prowadź rejestr incydentów (typ, wpływ, przyczyna, działania). Przeprowadzaj przeglądy poreakcyjne i przekazuj wnioski do doskonalenia i programów świadomości."
+    },
+    "RS_Q4": {
+      "title": "Przeprowadzaj okresowe ćwiczenia reagowania na incydenty",
+      "description": "Możliwości reagowania są nietestowane, co budzi niepewność przy rzeczywistych incydentach.",
+      "improvement_tips": "Planuj i przeprowadzaj co najmniej roczne ćwiczenia (stolikowe lub techniczne). Oceniaj czas, podejmowanie decyzji i komunikację. Dokumentuj wnioski i włączaj je do aktualizacji IRP."
+    },
+    "RS_Q5": {
+      "title": "Zapewnij zgodność z wymogami raportowania wobec regulatorów i partnerów",
+      "description": "Obowiązki powiadamiania regulatorów lub partnerów są niejasne lub nie spełniane w wymaganych terminach.",
+      "improvement_tips": "Zdefiniuj kryteria i terminy powiadamiania (np. NIS2: 24 h wstępnie, 72 h szczegółowo). Przygotuj szablony i aktualne listy kontaktów. Utrzymuj listy właściwych interesariuszy."
+    },
+    "RS_Q6": {
+      "title": "Śledź i wdrażaj działania korygujące po incydentach i ćwiczeniach",
+      "description": "Wnioski są identyfikowane, ale nie wdrażane, co ogranicza ciągłe doskonalenie reakcji.",
+      "improvement_tips": "Prowadź rejestr rekomendacji z przeglądów i ćwiczeń. Przypisuj właścicieli, terminy i weryfikuj realizację. Przeglądaj status w ramach przeglądów kierownictwa."
+    },
+    "RC_Q1": {
+      "title": "Opracuj i zatwierdź plan ciągłości biznesowej (BCP) obejmujący scenariusze cyberbezpieczeństwa",
+      "description": "Brak formalnego BCP lub brak uwzględnienia zakłóceń związanych z cyberbezpieczeństwem ogranicza skoordynowane odzyskiwanie.",
+      "improvement_tips": "Utwórz BCP obejmujący krytyczne procesy, systemy, kontakty i kroki odzyskiwania w scenariuszach cyber. Zyskaj zatwierdzenie kierownictwa i zintegruj z planem reagowania na incydenty. Przeglądaj rocznie."
+    },
+    "RC_Q2": {
+      "title": "Zdefiniuj mierzalne cele odzyskiwania dla krytycznych systemów",
+      "description": "Brak zdefiniowanych priorytetów odzyskiwania powoduje opóźnienia i rozbieżności przy awariach.",
+      "improvement_tips": "Zidentyfikuj krytyczne systemy i dane. Zdefiniuj RTO (czas przywrócenia) i RPO (akceptowalna utrata danych) dla każdego. Zakomunikuj cele do IT i biznesu oraz dostosuj strategię backupu."
+    },
+    "RC_Q3": {
+      "title": "Regularnie testuj i weryfikuj procedury backupu i odzyskiwania",
+      "description": "Kopie zapasowe istnieją, ale procedury odzyskiwania są nietestowane lub zawodne.",
+      "improvement_tips": "Przeprowadzaj okresowe testy przywracania dla kluczowych systemów. Weryfikuj integralność danych i zgodność z RTO/RPO. Dokumentuj wyniki i działania. Stosuj magazyn niezmienny lub poza siedzibą."
+    },
+    "RC_Q4": {
+      "title": "Przypisz i zakomunikuj odpowiedzialności za ciągłość i odzyskiwanie",
+      "description": "Niejasna odpowiedzialność spowalnia podejmowanie decyzji podczas odzyskiwania.",
+      "improvement_tips": "Zdefiniuj role (np. kierownik ciągłości biznesowej, lider odzyskiwania IT). Udokumentuj odpowiedzialności i hierarchię eskalacji w BCP. Zapewnij świadomość poprzez szkolenia i ćwiczenia."
+    },
+    "RC_Q5": {
+      "title": "Przeglądaj odzyskiwanie po incydencie i wdrażaj ulepszenia",
+      "description": "Działania odzyskiwania kończą się bez analizy wniosków, co ogranicza długoterminową odporność.",
+      "improvement_tips": "Po każdym poważnym incydencie lub teście przeprowadzaj strukturyzowane podsumowania. Identyfikuj, co zadziałało i co nie, oraz aktualizuj BCP, infrastrukturę i szkolenia. Śledź wdrażanie ulepszeń."
+    },
+    "RC_Q6": {
+      "title": "Włącz odporność do planowania strategicznego i łańcucha dostaw",
+      "description": "Odporność jest traktowana reaktywnie i nie jest osadzona w planowaniu długoterminowym ani zarządzaniu dostawcami.",
+      "improvement_tips": "Uwzględnij kryteria odporności i ciągłości w planowaniu projektów, onboardingu dostawców i projektowaniu infrastruktury. Oceniaj single point of failure i wdrażaj redundancję tam, gdzie to możliwe."
+    }
+  },
+  "home_body": "To lekkie narzędzie do oceny postawy cyberbezpieczeństwa pomaga zrozumieć, na jakim poziomie dojrzałości znajduje się Twoja organizacja.\n\nOpiera się na międzynarodowych frameworkach i regulacjach, m.in.:\n\n- **ISO/IEC 27001** – systemy zarządzania bezpieczeństwem informacji\n- **NIST Cybersecurity Framework** – identyfikacja, ochrona, wykrywanie, reagowanie, odzyskiwanie\n- **CIS Controls v8** – praktyczne środki techniczne i organizacyjne\n- **Dyrektywa NIS2** – wymogi UE w zakresie zarządzania ryzykiem i raportowania incydentów\n\n### Co robisz\n\n1. **Wypełniasz kwestionariusz** – 36 pytań w sześciu obszarach cyberbezpieczeństwa\n2. **Otrzymujesz wynik** – ważone wyniki dojrzałości wg obszaru i ogółem\n3. **Przeglądasz wyniki** – czytelny podział na mocne strony i luki\n4. **Działasz według rekomendacji** – konkretne kolejne kroki powiązane z ISO, NIST, CIS i NIS2\n\n### Obszary bezpieczeństwa\n\n- **Nadzór i zarządzanie ryzykiem** – role, odpowiedzialności i podejmowanie decyzji\n- **Aktywa i zarządzanie ryzykiem** – kontekst biznesowy, aktywa krytyczne i obsługa ryzyka\n- **Dostęp i ochrona danych** – kontrola dostępu, ochrona danych i świadomość użytkowników\n- **Monitorowanie i wykrywanie zagrożeń** – rejestrowanie, monitorowanie i wykrywanie anomalii\n- **Reagowanie na incydenty i komunikacja** – obsługa incydentów i wymagane powiadomienia\n- **Ciągłość biznesowa i odzyskiwanie** – plany ciągłości, kopie zapasowe i przywracanie\n\n### Raport końcowy łączy to w wyniki obszarów i ogólny CyberScore oraz w rekomendacje działań.\n---\n",
+  "about": "## Przegląd\n\nCyberScore to narzędzie do kompleksowej oceny dojrzałości w zakresie bezpieczeństwa informacji, przeznaczone dla organizacji chcących ocenić i poprawić swoją postawę cyberbezpieczeństwa. Narzędzie opiera się na uznanych międzynarodowo normach i frameworkach.\n\n## Normy i frameworki\n\n### ISO/IEC 27001:2022\n- **Systemy zarządzania bezpieczeństwem informacji**\n- Wymagania dotyczące ustanawiania, wdrażania, utrzymywania i ciągłego doskonalenia systemu zarządzania bezpieczeństwem informacji\n- Koncentracja na zarządzaniu ryzykiem i ciągłym doskonaleniu\n\n### NIST Cybersecurity Framework (CSF 2.0)\n- **Framework dla poprawy cyberbezpieczeństwa infrastruktury krytycznej**\n- Wspólny język do rozumienia, zarządzania i wyrażania ryzyka cyberbezpieczeństwa\n- Sześć funkcji: Govern, Identify, Protect, Detect, Respond, Recover\n\n### CIS Controls v8\n- **Krytyczne środki bezpieczeństwa**\n- Priorytetyzowany zestaw działań tworzących wielowarstwową obronę zgodną z najlepszymi praktykami\n- Skupienie na najważniejszych środkach kontroli dla skutecznej obrony\n\n### Dyrektywa NIS2\n- **Unijna dyrektywa w sprawie bezpieczeństwa sieci i informacji**\n- Ustanawia obowiązki w zakresie zarządzania ryzykiem cyberbezpieczeństwa i raportowania incydentów dla podmiotów kluczowych i ważnych w UE\n\n## Metodyka\n\n### System punktacji\n- **Poziom pytań**: Każde pytanie oceniane w skali dojrzałości 0–5\n- **Poziom obszaru**: Średnia ważona pytań w obszarze (0–100%)\n- **Poziom ogólny**: Średnia ważona wyników obszarów\n- **Poziomy dojrzałości**: Niski (<40%), Średni (40–70%), Wysoki (>70%)\n\n### Wagowanie\n- Pytania i obszary są ważone według znaczenia dla ogólnego bezpieczeństwa\n- Wagi wynikają z najlepszych praktyk branżowych i konsensusu ekspertów\n\n## Funkcje\n\n- **Kompleksowa ocena**: 36 pytań w 6 obszarach bezpieczeństwa\n- **Automatyczna punktacja**: Ważony algorytm na poziomie pytań, obszarów i ogólnym\n- **Wizualizacje**: Wykresy radarowe i słupkowe\n- **Rekomendacje**: Konkretne sugestie powiązane z ISO 27001, NIST CSF, CIS Controls i NIS2\n- **Eksport**: JSON i CSV do dalszej analizy\n- **Konta użytkowników**: Historia ocen przypisana do konta\n\n## Obszary bezpieczeństwa\n\n1. **Nadzór i zarządzanie ryzykiem** – role, polityki, nadzór strategiczny\n2. **Aktywa i zarządzanie ryzykiem** – kontekst biznesowy, aktywa krytyczne, obsługa ryzyka\n3. **Dostęp i ochrona danych** – kontrola dostępu, ochrona danych, świadomość użytkowników\n4. **Monitorowanie i wykrywanie zagrożeń** – rejestrowanie, monitorowanie, wykrywanie anomalii\n5. **Reagowanie na incydenty i komunikacja** – obsługa incydentów i wymagane powiadomienia\n6. **Ciągłość biznesowa i odzyskiwanie** – plany ciągłości, kopie zapasowe, przywracanie\n\n## Zastosowania\n\n- **Samoocena**: Ocena dojrzałości cyberbezpieczeństwa organizacji\n- **Zgodność**: Spełnianie wymogów regulacyjnych i norm\n- **Planowanie doskonalenia**: Identyfikacja obszarów do poprawy\n- **Benchmarking**: Porównanie z normami branżowymi\n- **Badania**: Prace naukowe i branżowe nad dojrzałością bezpieczeństwa\n\n## Kontakt i wsparcie\n\nNarzędzie powstało w ramach pracy magisterskiej dotyczącej pomiaru postawy cyberbezpieczeństwa. W razie pytań lub potrzeby wsparcia – patrz dokumentacja projektu.\n\n---\n\n**Wersja**: 2.0.0  \n**Licencja**: Użytek akademicki"
+}
