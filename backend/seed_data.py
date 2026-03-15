@@ -12,15 +12,12 @@ sys.path.insert(0, str(parent_dir))
 
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal, Area, Question, Recommendation, User
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime
 
-# Password hashing - using a simple approach to avoid bcrypt issues
+
 def hash_password(password: str) -> str:
-    # For demo purposes, we'll use a simple hash
-    # In production, you'd want proper password hashing
-    import hashlib
-    return hashlib.sha256(password.encode()).hexdigest()
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 def seed_database():
     """Populate database with initial data"""

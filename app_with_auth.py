@@ -42,7 +42,9 @@ try:
 except Exception:
     pass
 
+import secrets as _secrets
 import streamlit as st
+import streamlit.components.v1 as _components
 import requests
 import pandas as pd
 import plotly.express as px
@@ -54,40 +56,103 @@ from datetime import datetime
 # Configuration: backend runs in-process on Streamlit Cloud (see _ensure_backend)
 API_BASE_URL = os.environ.get("API_BASE_URL", "http://127.0.0.1:8000")
 
-# In-process backend (Streamlit Cloud): start FastAPI in a daemon thread so DB/API are available
-_backend_thread_started = False
 
-
-def _ensure_backend():
-    """Start FastAPI backend in a daemon thread when using localhost (Streamlit Cloud or local single-process run)."""
-    global _backend_thread_started
-    if _backend_thread_started:
-        return
+# ---------------------------------------------------------------------------
+# st.cache_resource keeps objects alive across ALL Streamlit reruns & sessions
+# for the lifetime of the server process.  Module-level variables are reset on
+# every rerun, so we must NOT use them for anything that needs to survive.
+# ---------------------------------------------------------------------------
+@st.cache_resource
+def _start_backend():
+    """Start FastAPI backend in a daemon thread (runs exactly once per process)."""
     base = API_BASE_URL or ""
     if "127.0.0.1" not in base and "localhost" not in base:
-        _backend_thread_started = True
-        return
+        return True
 
     def _run_uvicorn():
         import uvicorn
-
-        uvicorn.run(
-            "backend.api:app",
-            host="127.0.0.1",
-            port=8000,
-            log_level="warning",
-        )
+        uvicorn.run("backend.api:app", host="127.0.0.1", port=8000, log_level="warning")
 
     t = threading.Thread(target=_run_uvicorn, daemon=True)
     t.start()
-    _backend_thread_started = True
     for _ in range(30):
         try:
             r = requests.get("http://127.0.0.1:8000/health", timeout=1)
             if r.status_code == 200:
-                break
+                return True
         except Exception:
             time.sleep(0.2)
+    return True
+
+
+def _ensure_backend():
+    _start_backend()
+
+
+@st.cache_resource
+def _get_session_store() -> dict:
+    """Process-wide session store that survives Streamlit reruns."""
+    return {}
+
+
+# ---------------------------------------------------------------------------
+# Session persistence: survive page refreshes via server-side session store
+# and a short opaque session ID kept in st.query_params.
+# ---------------------------------------------------------------------------
+def _save_session():
+    """Persist current auth state so it survives a browser refresh."""
+    if not (st.session_state.get("authenticated") and st.session_state.get("user_token")):
+        return
+    store = _get_session_store()
+    sid = st.session_state.get("_sid")
+    if not sid:
+        sid = _secrets.token_urlsafe(16)
+        st.session_state._sid = sid
+    store[sid] = {
+        "token": st.session_state.user_token,
+        "user_info": st.session_state.user_info,
+    }
+    st.query_params["sid"] = sid
+
+
+def _restore_session():
+    """On fresh page load, try to restore auth from the session store."""
+    try:
+        store = _get_session_store()
+        sid = st.query_params.get("sid")
+        if sid and sid in store:
+            sess = store[sid]
+            st.session_state.authenticated = True
+            st.session_state.user_token = sess["token"]
+            st.session_state.user_info = sess["user_info"]
+            st.session_state._sid = sid
+            return True
+    except Exception:
+        pass
+    return False
+
+
+def _clear_session():
+    """Remove session from store and URL on logout."""
+    store = _get_session_store()
+    sid = st.session_state.get("_sid")
+    if sid:
+        store.pop(sid, None)
+    st.session_state._sid = None
+    st.query_params.clear()
+
+
+# ---------------------------------------------------------------------------
+# Scroll helper — st.markdown strips <script> tags; components.html works.
+# ---------------------------------------------------------------------------
+def _scroll_to_top():
+    _components.html(
+        """<script>
+        var main = window.parent.document.querySelector('section.main');
+        if (main) main.scrollTo({top: 0, behavior: 'smooth'});
+        </script>""",
+        height=0,
+    )
 
 
 # --- Translations (EN/PL) ---
@@ -552,6 +617,7 @@ def make_api_request(endpoint, method="GET", data=None, token=None):
             return response.json()
         elif response.status_code == 401:
             st.error("Authentication failed. Please login again.")
+            _clear_session()
             st.session_state.authenticated = False
             st.session_state.user_token = None
             st.session_state.user_info = None
@@ -772,7 +838,8 @@ def create_bar_chart(area_scores):
 
 def main():
     # Initialize session state
-    if "authenticated" not in st.session_state:
+    fresh = "authenticated" not in st.session_state
+    if fresh:
         st.session_state.authenticated = False
     if "user_token" not in st.session_state:
         st.session_state.user_token = None
@@ -784,6 +851,10 @@ def main():
         st.session_state.show_auth_modal = False
     if "lang" not in st.session_state:
         st.session_state.lang = "en"
+
+    # Restore login session after a page refresh
+    if fresh and not st.session_state.authenticated:
+        _restore_session()
 
     # Header
     st.markdown('<h1 class="main-header">🛡️ CyberScore</h1>', unsafe_allow_html=True)
@@ -847,6 +918,7 @@ def show_login_form():
                         st.session_state.user_token = result["access_token"]
                         st.session_state.user_info = result["user"]
                         st.session_state.show_auth_modal = False
+                        _save_session()
                         st.success(t("login_success"))
                         st.rerun()
                     else:
@@ -945,6 +1017,7 @@ def show_unauthorized_page(page_key):
         ):
             st.session_state.show_auth_modal = True
             st.session_state.auth_mode = "login"
+            st.session_state.scroll_to_top = True
             st.rerun()
     with col2:
         if st.button(
@@ -952,6 +1025,7 @@ def show_unauthorized_page(page_key):
         ):
             st.session_state.show_auth_modal = True
             st.session_state.auth_mode = "register"
+            st.session_state.scroll_to_top = True
             st.rerun()
 
 
@@ -995,6 +1069,7 @@ def show_main_app():
 
         # Logout button
         if st.sidebar.button(f"🚪 {t('logout')}", use_container_width=True):
+            _clear_session()
             st.session_state.authenticated = False
             st.session_state.user_token = None
             st.session_state.user_info = None
@@ -1008,11 +1083,13 @@ def show_main_app():
             if st.button(t("login"), use_container_width=True):
                 st.session_state.show_auth_modal = True
                 st.session_state.auth_mode = "login"
+                st.session_state.scroll_to_top = True
                 st.rerun()
         with col2:
             if st.button(t("register"), use_container_width=True):
                 st.session_state.show_auth_modal = True
                 st.session_state.auth_mode = "register"
+                st.session_state.scroll_to_top = True
                 st.rerun()
 
     # Navigation
@@ -1045,6 +1122,11 @@ def show_main_app():
     if page != st.session_state.current_page:
         st.session_state.current_page = page
         st.rerun()
+
+    # Scroll to top when requested (auth modal, page transitions)
+    if st.session_state.get("scroll_to_top", False):
+        _scroll_to_top()
+        st.session_state.scroll_to_top = False
 
     # Show authentication modal if needed
     if st.session_state.show_auth_modal:
@@ -1204,6 +1286,7 @@ def show_home_page():
             if st.button(t("login_to_start"), type="primary", use_container_width=True):
                 st.session_state.show_auth_modal = True
                 st.session_state.auth_mode = "login"
+                st.session_state.scroll_to_top = True
                 st.rerun()
 
         with col2:
@@ -1336,27 +1419,9 @@ def show_assessment_page():
         if assesment_created_info:
             assesment_created_info.empty()
 
-    # Scroll to top if needed (after assessment creation or navigation)
+    # Scroll to top if needed (after assessment creation or area navigation)
     if st.session_state.get("scroll_to_top", False):
-        st.markdown('<div id="top"></div>', unsafe_allow_html=True)
-        st.markdown(
-            """
-            <script>
-                window.location.hash = '#top';
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-                if (window.parent !== window) {
-                    try {
-                        window.parent.scrollTo(0, 0);
-                        window.parent.document.documentElement.scrollTop = 0;
-                        window.parent.document.body.scrollTop = 0;
-                    } catch(e) {}
-                }
-            </script>
-            """,
-            unsafe_allow_html=True,
-        )
+        _scroll_to_top()
         st.session_state.scroll_to_top = False
 
     # Get assessment data (cached to avoid duplicate requests)
@@ -1597,10 +1662,7 @@ def show_assessment_page():
 def show_results_page():
     """Display assessment results report"""
     if st.session_state.get("scroll_to_top", False):
-        st.markdown(
-            "<script>window.scrollTo(0,0);try{window.parent.scrollTo(0,0)}catch(e){}</script>",
-            unsafe_allow_html=True,
-        )
+        _scroll_to_top()
         st.session_state.scroll_to_top = False
 
     assessment_id = st.session_state.get(
