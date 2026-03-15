@@ -134,6 +134,9 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# Streamlit secrets (never commit real secrets)
+.streamlit/secrets.toml
+
 # Environments
 .env
 .envrc

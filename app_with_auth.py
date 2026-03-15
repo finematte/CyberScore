@@ -3,6 +3,45 @@ CyberScore - Information Security Maturity Assessment Tool
 Streamlit Frontend Application with User Authentication
 """
 
+import os
+import time
+import threading
+
+# Apply Streamlit secrets to environment before any backend/config imports.
+# On Streamlit Community Cloud, set Secrets (e.g. database URL, secret_key) in app dashboard.
+try:
+    import streamlit as st
+
+    if hasattr(st, "secrets") and st.secrets:
+        # Optional: [database] url = "sqlite:///./cyberscore.db" or MySQL URL
+        db = st.secrets.get("database", {})
+        if db and isinstance(db, dict):
+            url = db.get("url")
+            if url:
+                os.environ.setdefault("DATABASE_URL", str(url))
+        # Optional: [connections.mysql] style (Streamlit docs) -> DATABASE_URL
+        mysql = st.secrets.get("connections", {}).get("mysql", {})
+        if mysql and isinstance(mysql, dict) and not os.environ.get("DATABASE_URL"):
+            from urllib.parse import quote_plus
+
+            user = mysql.get("username", "")
+            pwd = mysql.get("password", "")
+            host = mysql.get("host", "localhost")
+            port = mysql.get("port", 3306)
+            dbname = mysql.get("database", "")
+            os.environ.setdefault(
+                "DATABASE_URL",
+                f"mysql+pymysql://{quote_plus(user)}:{quote_plus(pwd)}@{host}:{port}/{dbname}",
+            )
+        # JWT secret (required for auth in production)
+        sec = st.secrets.get("secrets", {})
+        if sec and isinstance(sec, dict):
+            sk = sec.get("secret_key")
+            if sk and len(sk) >= 32:
+                os.environ.setdefault("SECRET_KEY", sk)
+except Exception:
+    pass
+
 import streamlit as st
 import requests
 import pandas as pd
@@ -11,11 +50,45 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import json
 from datetime import datetime
-import time
-import os
 
-# Configuration
-API_BASE_URL = "http://localhost:8000"
+# Configuration: backend runs in-process on Streamlit Cloud (see _ensure_backend)
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://127.0.0.1:8000")
+
+# In-process backend (Streamlit Cloud): start FastAPI in a daemon thread so DB/API are available
+_backend_thread_started = False
+
+
+def _ensure_backend():
+    """Start FastAPI backend in a daemon thread when using localhost (Streamlit Cloud or local single-process run)."""
+    global _backend_thread_started
+    if _backend_thread_started:
+        return
+    base = API_BASE_URL or ""
+    if "127.0.0.1" not in base and "localhost" not in base:
+        _backend_thread_started = True
+        return
+
+    def _run_uvicorn():
+        import uvicorn
+
+        uvicorn.run(
+            "backend.api:app",
+            host="127.0.0.1",
+            port=8000,
+            log_level="warning",
+        )
+
+    t = threading.Thread(target=_run_uvicorn, daemon=True)
+    t.start()
+    _backend_thread_started = True
+    for _ in range(30):
+        try:
+            r = requests.get("http://127.0.0.1:8000/health", timeout=1)
+            if r.status_code == 200:
+                break
+        except Exception:
+            time.sleep(0.2)
+
 
 # --- Translations (EN/PL) ---
 def _load_ui_translations():
@@ -25,6 +98,7 @@ def _load_ui_translations():
             return json.load(f)
     return {"en": {}, "pl": {}}
 
+
 def _load_content_pl():
     path = os.path.join(os.path.dirname(__file__), "translations", "content_pl.json")
     if os.path.exists(path):
@@ -32,15 +106,18 @@ def _load_content_pl():
             return json.load(f)
     return {}
 
+
 def _get_ui():
     if "ui_translations" not in st.session_state:
         st.session_state.ui_translations = _load_ui_translations()
     return st.session_state.ui_translations
 
+
 def _get_content_pl():
     if "content_pl" not in st.session_state:
         st.session_state.content_pl = _load_content_pl()
     return st.session_state.content_pl
+
 
 def t(key, **kwargs):
     """Return translated string for current language. Use {placeholder} in JSON for kwargs."""
@@ -54,13 +131,17 @@ def t(key, **kwargs):
             return s
     return s
 
+
 def _tr_area(area):
     """Return (name, description) for area in current language."""
     lang = st.session_state.get("lang", "en")
     if lang != "pl":
         return area.get("name", ""), area.get("description", "")
     pl = _get_content_pl().get("areas", {}).get(area.get("area_id", ""), {})
-    return pl.get("name", area.get("name", "")), pl.get("description", area.get("description", ""))
+    return pl.get("name", area.get("name", "")), pl.get(
+        "description", area.get("description", "")
+    )
+
 
 def _tr_question(q):
     """Return (text, description) for question in current language."""
@@ -68,19 +149,29 @@ def _tr_question(q):
     if lang != "pl":
         return q.get("question_text", ""), q.get("description", "")
     pl = _get_content_pl().get("questions", {}).get(q.get("question_id", ""), {})
-    return pl.get("text", q.get("question_text", "")), pl.get("description", q.get("description", ""))
+    return pl.get("text", q.get("question_text", "")), pl.get(
+        "description", q.get("description", "")
+    )
+
 
 def _tr_recommendation(rec):
     """Return (title, description, improvement_tips) for recommendation in current language."""
     lang = st.session_state.get("lang", "en")
     if lang != "pl":
-        return rec.get("title", ""), rec.get("description", ""), rec.get("improvement_tips", "")
-    pl = _get_content_pl().get("recommendations", {}).get(rec.get("question_id", ""), {})
+        return (
+            rec.get("title", ""),
+            rec.get("description", ""),
+            rec.get("improvement_tips", ""),
+        )
+    pl = (
+        _get_content_pl().get("recommendations", {}).get(rec.get("question_id", ""), {})
+    )
     return (
         pl.get("title", rec.get("title", "")),
         pl.get("description", rec.get("description", "")),
         pl.get("improvement_tips", rec.get("improvement_tips", "")),
     )
+
 
 def _tr_maturity_scale():
     """Return dict of maturity scale 0-5 for current language."""
@@ -89,13 +180,29 @@ def _tr_maturity_scale():
         return None
     return _get_content_pl().get("maturity_scale", {})
 
+
 def _date_fmt(dt):
     """Format date for current language."""
     lang = st.session_state.get("lang", "en")
     if lang != "pl":
         return dt.strftime("%B %d, %Y")
-    months_pl = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"]
+    months_pl = [
+        "stycznia",
+        "lutego",
+        "marca",
+        "kwietnia",
+        "maja",
+        "czerwca",
+        "lipca",
+        "sierpnia",
+        "września",
+        "października",
+        "listopada",
+        "grudnia",
+    ]
     return f"{dt.day} {months_pl[dt.month - 1]} {dt.year}"
+
+
 st.set_page_config(
     page_title="CyberScore",
     page_icon="🛡️",
@@ -500,7 +607,9 @@ SHORT_AREA_NAMES = {
 
 
 def _short_name(full_name: str) -> str:
-    return SHORT_AREA_NAMES.get(full_name, full_name.split(" – ")[0] if " – " in full_name else full_name)
+    return SHORT_AREA_NAMES.get(
+        full_name, full_name.split(" – ")[0] if " – " in full_name else full_name
+    )
 
 
 def _extract_area_data(area_scores):
@@ -543,30 +652,61 @@ def create_radar_chart(area_scores):
     scores_closed = scores + [scores[0]]
 
     fig = go.Figure()
-    fig.add_trace(go.Scatterpolar(
-        r=scores_closed, theta=short_closed, fill="toself", name="Your Score",
-        line=dict(color="#3b82f6", width=3),
-        fillcolor="rgba(59,130,246,0.15)",
-    ))
-    fig.add_trace(go.Scatterpolar(
-        r=[70] * len(short_closed), theta=short_closed, fill="none",
-        name="Target (70%)", line=dict(color="#ef4444", dash="dash", width=2),
-    ))
-    fig.add_trace(go.Scatterpolar(
-        r=[40] * len(short_closed), theta=short_closed, fill="none",
-        name="Minimum (40%)", line=dict(color="#f59e0b", dash="dot", width=2),
-    ))
+    fig.add_trace(
+        go.Scatterpolar(
+            r=scores_closed,
+            theta=short_closed,
+            fill="toself",
+            name="Your Score",
+            line=dict(color="#3b82f6", width=3),
+            fillcolor="rgba(59,130,246,0.15)",
+        )
+    )
+    fig.add_trace(
+        go.Scatterpolar(
+            r=[70] * len(short_closed),
+            theta=short_closed,
+            fill="none",
+            name="Target (70%)",
+            line=dict(color="#ef4444", dash="dash", width=2),
+        )
+    )
+    fig.add_trace(
+        go.Scatterpolar(
+            r=[40] * len(short_closed),
+            theta=short_closed,
+            fill="none",
+            name="Minimum (40%)",
+            line=dict(color="#f59e0b", dash="dot", width=2),
+        )
+    )
     fig.update_layout(
         polar=dict(
-            radialaxis=dict(visible=True, range=[0, 100], tickmode="linear", tick0=0, dtick=20,
-                            tickfont=dict(size=10), gridcolor="rgba(128,128,128,0.2)"),
+            radialaxis=dict(
+                visible=True,
+                range=[0, 100],
+                tickmode="linear",
+                tick0=0,
+                dtick=20,
+                tickfont=dict(size=10),
+                gridcolor="rgba(128,128,128,0.2)",
+            ),
             angularaxis=dict(tickfont=dict(size=13)),
             bgcolor="rgba(0,0,0,0)",
         ),
         showlegend=True,
-        legend=dict(orientation="h", yanchor="bottom", y=-0.15, xanchor="center", x=0.5, font=dict(size=11)),
-        height=420, margin=dict(t=30, b=60, l=60, r=60),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.15,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=11),
+        ),
+        height=420,
+        margin=dict(t=30, b=60, l=60, r=60),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
     )
     return fig
 
@@ -583,25 +723,49 @@ def create_bar_chart(area_scores):
     colors = [_score_color(s) for s in scores_sorted]
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(
-        y=short_sorted, x=scores_sorted, orientation="h",
-        marker=dict(color=colors, line=dict(width=0)),
-        text=[f"  {s:.0f}%" for s in scores_sorted],
-        textposition="outside", textfont=dict(size=13),
-        hovertemplate="<b>%{y}</b><br>Score: %{x:.1f}%<extra></extra>",
-    ))
-    fig.add_vline(x=70, line_dash="dash", line_color="#ef4444", line_width=2,
-                  annotation=dict(text="Target 70%", font=dict(size=11, color="#ef4444")))
-    fig.add_vline(x=40, line_dash="dot", line_color="#f59e0b", line_width=2,
-                  annotation=dict(text="Min 40%", font=dict(size=11, color="#f59e0b")))
+    fig.add_trace(
+        go.Bar(
+            y=short_sorted,
+            x=scores_sorted,
+            orientation="h",
+            marker=dict(color=colors, line=dict(width=0)),
+            text=[f"  {s:.0f}%" for s in scores_sorted],
+            textposition="outside",
+            textfont=dict(size=13),
+            hovertemplate="<b>%{y}</b><br>Score: %{x:.1f}%<extra></extra>",
+        )
+    )
+    fig.add_vline(
+        x=70,
+        line_dash="dash",
+        line_color="#ef4444",
+        line_width=2,
+        annotation=dict(text="Target 70%", font=dict(size=11, color="#ef4444")),
+    )
+    fig.add_vline(
+        x=40,
+        line_dash="dot",
+        line_color="#f59e0b",
+        line_width=2,
+        annotation=dict(text="Min 40%", font=dict(size=11, color="#f59e0b")),
+    )
 
     fig.update_layout(
-        xaxis=dict(title="Score (%)", range=[0, 110], tickmode="linear", tick0=0, dtick=20,
-                    gridcolor="rgba(128,128,128,0.15)"),
+        xaxis=dict(
+            title="Score (%)",
+            range=[0, 110],
+            tickmode="linear",
+            tick0=0,
+            dtick=20,
+            gridcolor="rgba(128,128,128,0.15)",
+        ),
         yaxis=dict(tickfont=dict(size=13)),
-        height=350, margin=dict(t=20, b=50, l=10, r=40),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        showlegend=False, bargap=0.35,
+        height=350,
+        margin=dict(t=20, b=50, l=10, r=40),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        showlegend=False,
+        bargap=0.35,
     )
     return fig
 
@@ -709,13 +873,17 @@ def show_register_form():
         st.markdown(f"### {t('register_title')}")
 
         with st.form("register_form_modal"):
-            username = st.text_input(t("username"), placeholder=t("username_placeholder"))
+            username = st.text_input(
+                t("username"), placeholder=t("username_placeholder")
+            )
             email = st.text_input(t("email"), placeholder=t("email_placeholder"))
             password = st.text_input(
                 t("password"), type="password", placeholder=t("password_create")
             )
             confirm_password = st.text_input(
-                t("confirm_password"), type="password", placeholder=t("confirm_password_placeholder")
+                t("confirm_password"),
+                type="password",
+                placeholder=t("confirm_password_placeholder"),
             )
             register_submitted = st.form_submit_button(
                 t("register_submit"), type="primary", use_container_width=True
@@ -770,13 +938,18 @@ def show_unauthorized_page(page_key):
     col1, col2 = st.columns(2)
     with col1:
         if st.button(
-            t("login"), type="primary", use_container_width=True, key="unauthorized_login"
+            t("login"),
+            type="primary",
+            use_container_width=True,
+            key="unauthorized_login",
         ):
             st.session_state.show_auth_modal = True
             st.session_state.auth_mode = "login"
             st.rerun()
     with col2:
-        if st.button(t("register"), use_container_width=True, key="unauthorized_register"):
+        if st.button(
+            t("register"), use_container_width=True, key="unauthorized_register"
+        ):
             st.session_state.show_auth_modal = True
             st.session_state.auth_mode = "register"
             st.rerun()
@@ -784,17 +957,28 @@ def show_unauthorized_page(page_key):
 
 def show_main_app():
     """Show main application"""
+    _ensure_backend()
     # Sidebar
     st.sidebar.title(t("nav_title"))
 
     # Language switcher
     lang_col1, lang_col2 = st.sidebar.columns(2)
     with lang_col1:
-        if st.sidebar.button("EN", key="lang_en", use_container_width=True, type="primary" if st.session_state.get("lang") == "en" else "secondary"):
+        if st.sidebar.button(
+            "EN",
+            key="lang_en",
+            use_container_width=True,
+            type="primary" if st.session_state.get("lang") == "en" else "secondary",
+        ):
             st.session_state.lang = "en"
             st.rerun()
     with lang_col2:
-        if st.sidebar.button("PL", key="lang_pl", use_container_width=True, type="primary" if st.session_state.get("lang") == "pl" else "secondary"):
+        if st.sidebar.button(
+            "PL",
+            key="lang_pl",
+            use_container_width=True,
+            type="primary" if st.session_state.get("lang") == "pl" else "secondary",
+        ):
             st.session_state.lang = "pl"
             st.rerun()
 
@@ -832,12 +1016,28 @@ def show_main_app():
                 st.rerun()
 
     # Navigation
-    _page_options = ["Home", "Take Assessment", "My Assessments", "View Results", "About"]
-    _page_labels = [t("page_home"), t("page_assessment"), t("page_my_assessments"), t("page_results"), t("page_about")]
+    _page_options = [
+        "Home",
+        "Take Assessment",
+        "My Assessments",
+        "View Results",
+        "About",
+    ]
+    _page_labels = [
+        t("page_home"),
+        t("page_assessment"),
+        t("page_my_assessments"),
+        t("page_results"),
+        t("page_about"),
+    ]
     page = st.sidebar.selectbox(
         t("choose_page"),
         _page_options,
-        index=_page_options.index(st.session_state.current_page) if st.session_state.current_page in _page_options else 0,
+        index=(
+            _page_options.index(st.session_state.current_page)
+            if st.session_state.current_page in _page_options
+            else 0
+        ),
         format_func=lambda x: _page_labels[_page_options.index(x)],
     )
 
@@ -1021,7 +1221,9 @@ def show_home_page():
 
 def show_my_assessments_page():
     """Display user's assessments"""
-    st.markdown(f'<h2 class="sub-header">{t("my_assessments")}</h2>', unsafe_allow_html=True)
+    st.markdown(
+        f'<h2 class="sub-header">{t("my_assessments")}</h2>', unsafe_allow_html=True
+    )
 
     # Get user's assessments
     assessments = make_api_request("/my-assessments", token=st.session_state.user_token)
@@ -1185,7 +1387,9 @@ def show_assessment_page():
     progress = answered_questions / total_questions if total_questions > 0 else 0
 
     st.progress(progress)
-    st.write(t("progress_questions", answered=answered_questions, total=total_questions))
+    st.write(
+        t("progress_questions", answered=answered_questions, total=total_questions)
+    )
 
     # Display questions for current area (no selectbox to avoid conflicts)
     area = areas[st.session_state.current_area]
@@ -1202,7 +1406,9 @@ def show_assessment_page():
     # Show current area info with navigation
     col1, col2, col3 = st.columns([1, 2, 1])
     with col1:
-        st.markdown(f"**{t('area_of', current=st.session_state.current_area + 1, total=len(areas))}**")
+        st.markdown(
+            f"**{t('area_of', current=st.session_state.current_area + 1, total=len(areas))}**"
+        )
     with col2:
         st.markdown(f"### {area_name}")
     with col3:
@@ -1266,7 +1472,10 @@ def show_assessment_page():
                         <div class="maturity-scale-item"><span class="maturity-scale-label">5:</span> Optimized – processes are proactive, continuously improved, and fully aligned with business and risk management objectives.</div>
                     """
                 with st.expander(t("maturity_scale_ref"), expanded=False):
-                    st.markdown(f'<div class="maturity-scale">{scale_lines}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="maturity-scale">{scale_lines}</div>',
+                        unsafe_allow_html=True,
+                    )
 
                 # Score slider - NO IMMEDIATE PROCESSING
                 score = st.slider(
@@ -1290,14 +1499,18 @@ def show_assessment_page():
 
         with col1:
             if st.session_state.current_area > 0:
-                if st.form_submit_button(f"← {t('previous_area')}", use_container_width=True):
+                if st.form_submit_button(
+                    f"← {t('previous_area')}", use_container_width=True
+                ):
                     st.session_state.current_area = st.session_state.current_area - 1
                     st.session_state.scroll_to_top = True
                     st.rerun()
 
         with col2:
             if st.session_state.current_area < len(areas) - 1:
-                if st.form_submit_button(f"{t('next_area_btn')} →", use_container_width=True):
+                if st.form_submit_button(
+                    f"{t('next_area_btn')} →", use_container_width=True
+                ):
                     st.session_state.current_area = st.session_state.current_area + 1
                     st.session_state.scroll_to_top = True
                     st.rerun()
@@ -1354,9 +1567,7 @@ def show_assessment_page():
                             if score_result:
                                 # Clear and show final success
                                 with status_container.container():
-                                    st.success(
-                                        t("completed_redirect")
-                                    )
+                                    st.success(t("completed_redirect"))
 
                                 # Update session state
                                 st.session_state.completed_assessment_id = (
@@ -1383,12 +1594,11 @@ def show_assessment_page():
                             st.error(t("error_occurred", err=str(e)))
 
 
-
 def show_results_page():
     """Display assessment results report"""
     if st.session_state.get("scroll_to_top", False):
         st.markdown(
-            '<script>window.scrollTo(0,0);try{window.parent.scrollTo(0,0)}catch(e){}</script>',
+            "<script>window.scrollTo(0,0);try{window.parent.scrollTo(0,0)}catch(e){}</script>",
             unsafe_allow_html=True,
         )
         st.session_state.scroll_to_top = False
@@ -1400,7 +1610,9 @@ def show_results_page():
         st.info(t("no_assessment_selected"))
         return
 
-    results = make_api_request(f"/results/{assessment_id}", token=st.session_state.user_token)
+    results = make_api_request(
+        f"/results/{assessment_id}", token=st.session_state.user_token
+    )
     if not results:
         st.error(t("load_results_failed"))
         return
@@ -1414,9 +1626,16 @@ def show_results_page():
     score_color = _score_color(total_score)
 
     areas_full, scores_list = _extract_area_data(area_scores)
-    if st.session_state.get("lang") == "pl" and area_scores and isinstance(area_scores[0], dict):
+    if (
+        st.session_state.get("lang") == "pl"
+        and area_scores
+        and isinstance(area_scores[0], dict)
+    ):
         pl_areas = _get_content_pl().get("areas", {})
-        areas_full = [pl_areas.get(s.get("area_id_str", ""), {}).get("name", areas_full[i]) for i, s in enumerate(area_scores)]
+        areas_full = [
+            pl_areas.get(s.get("area_id_str", ""), {}).get("name", areas_full[i])
+            for i, s in enumerate(area_scores)
+        ]
     highest_score = max(scores_list) if scores_list else 0
     lowest_score = min(scores_list) if scores_list else 0
     strongest_area = ""
@@ -1431,7 +1650,15 @@ def show_results_page():
     n_med = sum(1 for r in recommendations if r.get("priority") == "medium")
 
     # --- SECTION 1: Executive Summary Header ---
-    maturity_desc = t("maturity_low_desc") if maturity_level == "Low" else (t("maturity_medium_desc") if maturity_level == "Medium" else t("maturity_high_desc"))
+    maturity_desc = (
+        t("maturity_low_desc")
+        if maturity_level == "Low"
+        else (
+            t("maturity_medium_desc")
+            if maturity_level == "Medium"
+            else t("maturity_high_desc")
+        )
+    )
 
     stat_cards = (
         f'<div style="display:flex;gap:12px;margin-top:1.2rem;">'
@@ -1439,7 +1666,7 @@ def show_results_page():
         f'<div class="stat-card" style="flex:1;"><div class="stat-value">36</div><div class="stat-label">{t("stat_questions")}</div></div>'
         f'<div class="stat-card" style="flex:1;"><div class="stat-value">{len(recommendations)}</div><div class="stat-label">{t("stat_recommendations")}</div></div>'
         f'<div class="stat-card" style="flex:1;"><div class="stat-value">{n_high}</div><div class="stat-label">{t("stat_high_priority")}</div></div>'
-        f'</div>'
+        f"</div>"
     )
 
     recs_lead = t("report_recs_singular") if n_high == 1 else t("report_recs_plural")
@@ -1451,26 +1678,35 @@ def show_results_page():
         f'<div class="score-ring" style="{ring_border};">'
         f'<span class="score-value" style="color:{score_color};">{total_score:.0f}%</span>'
         f'<span class="score-label" style="color:{score_color};">{maturity_level} Maturity</span>'
-        f'</div></div>'
+        f"</div></div>"
         f'<div style="flex:1;min-width:250px;">'
         f'<h2>{t("report_title")}</h2>'
-        f'<p>{_date_fmt(datetime.now())}</p>'
+        f"<p>{_date_fmt(datetime.now())}</p>"
         f'<div class="exec-summary" style="margin-top:1rem;">'
         f'{t("report_intro_1")} <strong style="color:{score_color};">{total_score:.1f}%</strong> {t("report_intro_2")} '
         f'<strong style="color:{score_color};">{maturity_level}</strong> {t("report_intro_3")} {maturity_desc}. '
         f'{t("report_strongest")} <strong>{_short_name(strongest_area)}</strong> ({highest_score:.0f}%) '
         f'{t("report_weakest")} <strong>{_short_name(weakest_area)}</strong> ({lowest_score:.0f}%). '
         f'{recs_lead} <strong>{n_high}</strong> {t("report_recs_tail")} <strong>{n_med}</strong> {t("report_recs_tail2")}'
-        f'</div>'
-        f'{stat_cards}'
-        f'</div></div></div>',
+        f"</div>"
+        f"{stat_cards}"
+        f"</div></div></div>",
         unsafe_allow_html=True,
     )
 
     # --- SECTION 2: Area Performance Overview ---
-    st.markdown(f'<h3 class="sub-header">{t("area_performance")}</h3>', unsafe_allow_html=True)
+    st.markdown(
+        f'<h3 class="sub-header">{t("area_performance")}</h3>', unsafe_allow_html=True
+    )
 
-    chart_scores = [{"area_name": areas_full[i], "score": scores_list[i], "weighted_score": scores_list[i]} for i in range(len(areas_full))]
+    chart_scores = [
+        {
+            "area_name": areas_full[i],
+            "score": scores_list[i],
+            "weighted_score": scores_list[i],
+        }
+        for i in range(len(areas_full))
+    ]
     bar_fig = create_bar_chart(chart_scores)
     if bar_fig:
         st.plotly_chart(bar_fig, use_container_width=True)
@@ -1490,7 +1726,9 @@ def show_results_page():
             area_name_to_score[en_name] = scores_list[i]
 
     # --- SECTION 3: Radar Chart ---
-    st.markdown(f'<h3 class="sub-header">{t("maturity_profile")}</h3>', unsafe_allow_html=True)
+    st.markdown(
+        f'<h3 class="sub-header">{t("maturity_profile")}</h3>', unsafe_allow_html=True
+    )
     radar_fig = create_radar_chart(chart_scores)
     if radar_fig:
         col_r1, col_r2, col_r3 = st.columns([1, 3, 1])
@@ -1499,12 +1737,19 @@ def show_results_page():
 
     # --- SECTION 4: Top Priority Actions ---
     if recommendations:
-        st.markdown(f'<h3 class="sub-header">{t("top_priority_actions")}</h3>', unsafe_allow_html=True)
+        st.markdown(
+            f'<h3 class="sub-header">{t("top_priority_actions")}</h3>',
+            unsafe_allow_html=True,
+        )
 
         sorted_recs = sorted(
             recommendations,
             key=lambda r: (
-                0 if r.get("priority") == "high" else 1 if r.get("priority") == "medium" else 2,
+                (
+                    0
+                    if r.get("priority") == "high"
+                    else 1 if r.get("priority") == "medium" else 2
+                ),
                 r.get("question_score", 5),
                 area_score_lookup.get(r.get("area_name", ""), 50),
             ),
@@ -1518,25 +1763,42 @@ def show_results_page():
                 st.markdown(
                     f'<div class="top-action-card" style="border-left-color:{border_color};position:relative;">'
                     f'<div class="action-num">{i + 1}</div>'
-                    f'<h4>{_tr_recommendation(rec)[0]}</h4>'
+                    f"<h4>{_tr_recommendation(rec)[0]}</h4>"
                     f'<p>{_short_name(rec.get("area_name", ""))} &middot; {t("question_score")}: {rec.get("question_score", 0)}/5</p>'
-                    f'</div>',
+                    f"</div>",
                     unsafe_allow_html=True,
                 )
 
     # --- SECTION 5: Detailed Recommendations by Area ---
     if recommendations:
-        st.markdown(f'<h3 class="sub-header">{t("detailed_recommendations")}</h3>', unsafe_allow_html=True)
+        st.markdown(
+            f'<h3 class="sub-header">{t("detailed_recommendations")}</h3>',
+            unsafe_allow_html=True,
+        )
 
         area_order = sorted(
             recs_by_area.keys(),
-            key=lambda a: area_name_to_score.get(a, 50) if area_name_to_score else next((s for n, s in zip(areas_full, scores_list) if n == a), 50),
+            key=lambda a: (
+                area_name_to_score.get(a, 50)
+                if area_name_to_score
+                else next((s for n, s in zip(areas_full, scores_list) if n == a), 50)
+            ),
         )
 
         for area_name in area_order:
             area_recs = recs_by_area[area_name]
-            display_name = area_display_name.get(area_name, area_name) if area_display_name else area_name
-            area_score_val = area_name_to_score.get(area_name, 0) if area_name_to_score else next((s for n, s in zip(areas_full, scores_list) if n == area_name), 0)
+            display_name = (
+                area_display_name.get(area_name, area_name)
+                if area_display_name
+                else area_name
+            )
+            area_score_val = (
+                area_name_to_score.get(area_name, 0)
+                if area_name_to_score
+                else next(
+                    (s for n, s in zip(areas_full, scores_list) if n == area_name), 0
+                )
+            )
             n_high_area = sum(1 for r in area_recs if r.get("priority") == "high")
             badge = f" ({n_high_area} {t('high_priority')})" if n_high_area > 0 else ""
 
@@ -1544,36 +1806,62 @@ def show_results_page():
                 f"{_short_name(display_name)} — {area_score_val:.0f}% — {len(area_recs)} {t('recommendations') if len(area_recs) != 1 else t('recommendation')}{badge}",
                 expanded=(area_score_val < 50),
             ):
-                for rec in sorted(area_recs, key=lambda r: (0 if r.get("priority") == "high" else 1 if r.get("priority") == "medium" else 2)):
+                for rec in sorted(
+                    area_recs,
+                    key=lambda r: (
+                        0
+                        if r.get("priority") == "high"
+                        else 1 if r.get("priority") == "medium" else 2
+                    ),
+                ):
                     priority = rec.get("priority", "medium")
-                    css_class = {"high": "high-priority", "medium": "medium-priority", "low": "low-priority"}.get(priority, "medium-priority")
-                    tag_class = {"high": "tag-high", "medium": "tag-medium", "low": "tag-low"}.get(priority, "tag-medium")
+                    css_class = {
+                        "high": "high-priority",
+                        "medium": "medium-priority",
+                        "low": "low-priority",
+                    }.get(priority, "medium-priority")
+                    tag_class = {
+                        "high": "tag-high",
+                        "medium": "tag-medium",
+                        "low": "tag-low",
+                    }.get(priority, "tag-medium")
 
                     rec_title, rec_desc, rec_tips = _tr_recommendation(rec)
                     ref_items = ""
-                    for key, label in [("iso_reference", "ISO"), ("nist_reference", "NIST"), ("cis_reference", "CIS"), ("nis2_reference", "NIS2")]:
+                    for key, label in [
+                        ("iso_reference", "ISO"),
+                        ("nist_reference", "NIST"),
+                        ("cis_reference", "CIS"),
+                        ("nis2_reference", "NIS2"),
+                    ]:
                         val = rec.get(key, "")
                         if val:
                             ref_items += f"<li>{label}: {val}</li>"
 
-                    tips_html = f'<p><strong>{t("improvement_tips")}:</strong> {rec_tips}</p>' if rec_tips else ""
+                    tips_html = (
+                        f'<p><strong>{t("improvement_tips")}:</strong> {rec_tips}</p>'
+                        if rec_tips
+                        else ""
+                    )
 
                     st.markdown(
                         f'<div class="recommendation-card {css_class}">'
                         f'<h4>{rec_title}<span class="priority-tag {tag_class}">{t(priority)}</span></h4>'
-                        f'<p>{rec_desc}</p>'
+                        f"<p>{rec_desc}</p>"
                         f'<p><strong>{t("question_score")}:</strong> {rec.get("question_score", 0)}/5</p>'
-                        f'{tips_html}'
+                        f"{tips_html}"
                         f'<p><strong>{t("references")}:</strong></p>'
                         f'<ul class="ref-list">{ref_items}</ul>'
-                        f'</div>',
+                        f"</div>",
                         unsafe_allow_html=True,
                     )
     else:
         st.success(t("no_recommendations"))
 
     # --- SECTION 6: Export ---
-    st.markdown(f'<h3 class="sub-header">{t("export_results")}</h3>', unsafe_allow_html=True)
+    st.markdown(
+        f'<h3 class="sub-header">{t("export_results")}</h3>', unsafe_allow_html=True
+    )
 
     export_data = {
         "assessment_id": assessment_id,
@@ -1597,7 +1885,14 @@ def show_results_page():
                 "cis_reference": rec.get("cis_reference", ""),
                 "nis2_reference": rec.get("nis2_reference", ""),
             }
-            for rec in sorted(recommendations, key=lambda r: (0 if r.get("priority") == "high" else 1 if r.get("priority") == "medium" else 2))
+            for rec in sorted(
+                recommendations,
+                key=lambda r: (
+                    0
+                    if r.get("priority") == "high"
+                    else 1 if r.get("priority") == "medium" else 2
+                ),
+            )
         ],
     }
 
@@ -1612,7 +1907,13 @@ def show_results_page():
     with col2:
         csv_rows = []
         for name, sc in zip(areas_full, scores_list):
-            csv_rows.append({"Area": name, "Score (%)": round(sc, 1), "Maturity Level": _maturity_label(sc)})
+            csv_rows.append(
+                {
+                    "Area": name,
+                    "Score (%)": round(sc, 1),
+                    "Maturity Level": _maturity_label(sc),
+                }
+            )
         df_scores = pd.DataFrame(csv_rows)
         st.download_button(
             label=t("download_csv"),
@@ -1624,7 +1925,9 @@ def show_results_page():
 
 def show_about_page():
     """Display about page"""
-    st.markdown(f'<h2 class="sub-header">{t("about_title")}</h2>', unsafe_allow_html=True)
+    st.markdown(
+        f'<h2 class="sub-header">{t("about_title")}</h2>', unsafe_allow_html=True
+    )
 
     lang = st.session_state.get("lang", "en")
     if lang == "pl":

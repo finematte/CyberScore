@@ -19,9 +19,12 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker, relationship
 from datetime import datetime
 from config import settings
 
-engine = create_engine(
-    settings.database_url, connect_args={"check_same_thread": False}
-)
+# SQLite needs check_same_thread=False; MySQL/Postgres do not
+_connect_args = {}
+if settings.database_url.strip().lower().startswith("sqlite"):
+    _connect_args["check_same_thread"] = False
+
+engine = create_engine(settings.database_url, connect_args=_connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
