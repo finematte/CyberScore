@@ -111,6 +111,7 @@ def _save_session():
     store[sid] = {
         "token": st.session_state.user_token,
         "user_info": st.session_state.user_info,
+        "lang": st.session_state.get("lang", "en"),
     }
     st.query_params["sid"] = sid
 
@@ -125,6 +126,7 @@ def _restore_session():
             st.session_state.authenticated = True
             st.session_state.user_token = sess["token"]
             st.session_state.user_info = sess["user_info"]
+            st.session_state.lang = sess.get("lang", "en")
             st.session_state._sid = sid
             return True
     except Exception:
@@ -144,12 +146,32 @@ def _clear_session():
 
 # ---------------------------------------------------------------------------
 # Scroll helper — st.markdown strips <script> tags; components.html works.
+# A unique key forces Streamlit to re-render the component (and re-run the
+# script) every time instead of caching the previous iframe.
 # ---------------------------------------------------------------------------
 def _scroll_to_top():
+    n = st.session_state.get("_scroll_n", 0) + 1
+    st.session_state._scroll_n = n
     _components.html(
-        """<script>
-        var main = window.parent.document.querySelector('section.main');
-        if (main) main.scrollTo({top: 0, behavior: 'smooth'});
+        f"""<script>
+        // {n}
+        function doScroll() {{
+            const selectors = [
+                'section.main',
+                '[data-testid="stAppViewContainer"]',
+                '[data-testid="stVerticalBlock"]',
+                '.main'
+            ];
+            for (const sel of selectors) {{
+                const el = window.parent.document.querySelector(sel);
+                if (el) {{ el.scrollTop = 0; el.scrollTo({{top: 0}}); }}
+            }}
+            window.parent.document.documentElement.scrollTop = 0;
+            window.parent.document.body.scrollTop = 0;
+        }}
+        doScroll();
+        setTimeout(doScroll, 100);
+        setTimeout(doScroll, 300);
         </script>""",
         height=0,
     )
@@ -1045,6 +1067,7 @@ def show_main_app():
             type="primary" if st.session_state.get("lang") == "en" else "secondary",
         ):
             st.session_state.lang = "en"
+            _save_session()
             st.rerun()
     with lang_col2:
         if st.sidebar.button(
@@ -1054,6 +1077,7 @@ def show_main_app():
             type="primary" if st.session_state.get("lang") == "pl" else "secondary",
         ):
             st.session_state.lang = "pl"
+            _save_session()
             st.rerun()
 
     # Authentication status and controls
@@ -1123,11 +1147,6 @@ def show_main_app():
         st.session_state.current_page = page
         st.rerun()
 
-    # Scroll to top when requested (auth modal, page transitions)
-    if st.session_state.get("scroll_to_top", False):
-        _scroll_to_top()
-        st.session_state.scroll_to_top = False
-
     # Show authentication modal if needed
     if st.session_state.show_auth_modal:
         show_auth_modal()
@@ -1152,6 +1171,11 @@ def show_main_app():
             show_unauthorized_page("page_results")
     elif st.session_state.current_page == "About":
         show_about_page()
+
+    # Catch-all: scroll after ALL page content is rendered
+    if st.session_state.get("scroll_to_top", False):
+        _scroll_to_top()
+        st.session_state.scroll_to_top = False
 
 
 def show_home_page():
@@ -1419,11 +1443,6 @@ def show_assessment_page():
         if assesment_created_info:
             assesment_created_info.empty()
 
-    # Scroll to top if needed (after assessment creation or area navigation)
-    if st.session_state.get("scroll_to_top", False):
-        _scroll_to_top()
-        st.session_state.scroll_to_top = False
-
     # Get assessment data (cached to avoid duplicate requests)
     assessment_data = fetch_assessment_with_questions(
         st.session_state.assessment_id,
@@ -1658,13 +1677,14 @@ def show_assessment_page():
                         with status_container.container():
                             st.error(t("error_occurred", err=str(e)))
 
-
-def show_results_page():
-    """Display assessment results report"""
+    # Scroll after all content is rendered so the DOM is ready
     if st.session_state.get("scroll_to_top", False):
         _scroll_to_top()
         st.session_state.scroll_to_top = False
 
+
+def show_results_page():
+    """Display assessment results report"""
     assessment_id = st.session_state.get(
         "completed_assessment_id"
     ) or st.session_state.get("selected_assessment_id")
@@ -1983,6 +2003,11 @@ def show_results_page():
             file_name=f"cyberscore_scores_{assessment_id}.csv",
             mime="text/csv",
         )
+
+    # Scroll after all content is rendered
+    if st.session_state.get("scroll_to_top", False):
+        _scroll_to_top()
+        st.session_state.scroll_to_top = False
 
 
 def show_about_page():
