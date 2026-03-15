@@ -1,5 +1,6 @@
 """
-Configuration management for CyberScore
+Configuration management for CyberScore.
+Production: set DATABASE_URL and SECRET_KEY via env or Streamlit secrets.
 """
 
 import os
@@ -9,12 +10,12 @@ from pydantic import validator
 
 
 class Settings(BaseSettings):
-    """Application settings"""
+    """Application settings. Reads from .env and environment."""
 
-    # Database
+    # Database (use DATABASE_URL env; on Streamlit Cloud set via Secrets)
     database_url: str = "sqlite:///./cyberscore.db"
 
-    # Security
+    # Security (use SECRET_KEY env; must be 32+ chars in production)
     secret_key: str = "cyberscore-secret-key-change-in-production"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30

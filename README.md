@@ -34,6 +34,48 @@ CyberScore helps organizations evaluate their cybersecurity posture through a st
 - **NIST Cybersecurity Framework**: Cybersecurity risk management
 - **CIS Controls**: Critical Security Controls
 
+## ☁️ Deploy to Streamlit Community Cloud
+
+1. **Set main file**: In the Cloud app settings, set the main file to **`app_with_auth.py`** (not `start_improved.py`). The app runs the API in-process and does not need a separate backend process.
+
+2. **Python version**: Add a `runtime.txt` in the repo root with e.g. `python-3.11.9` so Cloud does not use Python 3.14.
+
+3. **Secrets** (required for production): In the app dashboard go to **Settings → Secrets** and add your configuration. Use either format:
+
+   **Option A – Direct database URL**
+   ```toml
+   [database]
+   url = "mysql+pymysql://USER:PASSWORD@HOST:3306/DATABASE"
+
+   [secrets]
+   secret_key = "your-secret-key-at-least-32-characters-long"
+   ```
+
+   **Option B – MySQL in Streamlit connections format** ([docs](https://docs.streamlit.io/develop/tutorials/databases/mysql))
+   ```toml
+   [connections.mysql]
+   host = "your-mysql-host"
+   port = 3306
+   database = "cyberscore"
+   username = "your-user"
+   password = "your-password"
+
+   [secrets]
+   secret_key = "your-secret-key-at-least-32-characters-long"
+   ```
+
+   For a quick demo you can use SQLite (data will not persist across restarts):
+   ```toml
+   [database]
+   url = "sqlite:///./cyberscore.db"
+   [secrets]
+   secret_key = "cyberscore-secret-key-change-in-production"
+   ```
+
+4. **Local secrets**: Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` and fill in values. Do not commit `secrets.toml` (it is in `.gitignore`).
+
+5. **New database**: For a fresh MySQL (or other) database, tables are created automatically. You still need to load areas, questions, and recommendations once (e.g. run `backend/seed_data.py` or your migration against the production DB, or use a DB that was already seeded).
+
 ## 🚀 Quick Start
 
 ### Prerequisites
