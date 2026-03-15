@@ -1,0 +1,126 @@
+{
+    "area_id": "RECOVER",
+    "name": "Recover – Business Continuity & Resilience",
+    "weight": 0.85,
+    "description": "Capabilities to restore services, maintain business continuity and improve resilience after a cybersecurity incident or disruption.",
+    "maturity_scale": {
+      "0": "Not implemented – no recovery or continuity planning exists.",
+      "1": "Ad hoc – recovery handled informally after incidents.",
+      "2": "Partially defined – some recovery measures exist but lack structure or testing.",
+      "3": "Defined and implemented – documented business continuity and recovery plans in place.",
+      "4": "Measured and monitored – plans tested and improved based on lessons learned.",
+      "5": "Optimized – resilience embedded into culture with proactive continuity management and automation."
+    },
+    "questions": [
+      {
+        "question_id": "RC_Q1",
+        "text": "Is there a formally documented and approved Business Continuity Plan (BCP) that includes cybersecurity incidents?",
+        "description": "Assesses whether continuity planning covers IT, data and cybersecurity disruptions and defines recovery objectives.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "RC_Q2",
+        "text": "Are Recovery Time Objectives (RTOs) and Recovery Point Objectives (RPOs) defined for critical systems and processes?",
+        "description": "Evaluates whether the organization has established measurable recovery targets to prioritize restoration activities.",
+        "weight": 1.10
+      },
+      {
+        "question_id": "RC_Q3",
+        "text": "Are backup and recovery procedures tested periodically to verify effectiveness?",
+        "description": "Checks whether restoration from backups is tested to ensure systems and data can be recovered within defined RTO/RPO.",
+        "weight": 1.05
+      },
+      {
+        "question_id": "RC_Q4",
+        "text": "Are business continuity and disaster recovery responsibilities assigned and communicated?",
+        "description": "Assesses whether key roles and responsibilities for recovery and continuity are defined and understood.",
+        "weight": 0.90
+      },
+      {
+        "question_id": "RC_Q5",
+        "text": "Are post-incident recovery activities reviewed to identify improvements in resilience and readiness?",
+        "description": "Evaluates whether lessons learned after recovery efforts are systematically analyzed and acted upon.",
+        "weight": 0.90
+      },
+      {
+        "question_id": "RC_Q6",
+        "text": "Is resilience integrated into strategic planning, supplier management and infrastructure design?",
+        "description": "Checks whether resilience and continuity principles are embedded into ongoing business and IT planning, not treated as a separate process.",
+        "weight": 0.90
+      }
+    ],
+    "recommendations": [
+      {
+        "question_id": "RC_Q1",
+        "applies_if_score_below": 3,
+        "title": "Develop and approve a Business Continuity Plan including cybersecurity scenarios",
+        "description": "No formal BCP exists or it does not address cyber-related disruptions, limiting coordinated recovery.",
+        "improvement_tips": "Create a Business Continuity Plan covering critical processes, systems, contacts and recovery steps for cyber incidents. Obtain executive approval and integrate with the incident response plan. Review annually.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.29, A.5.30",
+        "nist_ref": "NIST CSF 2.0 – RC.RP (Incident Recovery Plan Execution)",
+        "cis_ref": "CIS Controls v8 – Control 11.1",
+        "nis2_ref": "NIS2 – Article 21(2)(c)",
+        "priority": "high"
+      },
+      {
+        "question_id": "RC_Q2",
+        "applies_if_score_below": 3,
+        "title": "Define measurable recovery objectives for critical systems",
+        "description": "Recovery priorities are undefined, causing delays and misaligned restoration during outages.",
+        "improvement_tips": "Identify critical systems and data. Define RTO (time to restore) and RPO (acceptable data loss) for each. Communicate these targets to IT and business units and align backup strategies accordingly.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.29, A.5.30",
+        "nist_ref": "NIST CSF 2.0 – RC.RP (Incident Recovery Plan Execution)",
+        "cis_ref": "CIS Controls v8 – Control 11.1, 11.3",
+        "nis2_ref": "NIS2 – Article 21(2)(c)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RC_Q3",
+        "applies_if_score_below": 3,
+        "title": "Test and validate backup and recovery procedures regularly",
+        "description": "Backups exist but recovery processes are untested or unreliable, risking extended downtime.",
+        "improvement_tips": "Conduct periodic restoration tests for key systems. Verify data integrity and alignment with RTO/RPO. Document test results and corrective actions. Use immutable or off-site storage for resilience.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.30, A.8.13",
+        "nist_ref": "NIST CSF 2.0 – RC.RP (Incident Recovery Plan Execution)",
+        "cis_ref": "CIS Controls v8 – Control 11.3, 11.5",
+        "nis2_ref": "NIS2 – Article 21(2)(c)",
+        "priority": "high"
+      },
+      {
+        "question_id": "RC_Q4",
+        "applies_if_score_below": 3,
+        "title": "Assign and communicate continuity and recovery responsibilities",
+        "description": "Unclear ownership slows decision-making during recovery efforts.",
+        "improvement_tips": "Define continuity and recovery roles (e.g., Business Continuity Manager, IT Recovery Lead). Document responsibilities and escalation hierarchy in the BCP and ensure staff awareness through training and exercises.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.24, A.5.29",
+        "nist_ref": "NIST CSF 2.0 – RC.CO (Incident Recovery Communication)",
+        "cis_ref": "CIS Controls v8 – Control 17.1, 17.5",
+        "nis2_ref": "NIS2 – Article 21(2)(c)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RC_Q5",
+        "applies_if_score_below": 3,
+        "title": "Review post-incident recovery and apply improvements",
+        "description": "Recovery activities end without lessons-learned analysis, reducing long-term resilience.",
+        "improvement_tips": "After each major incident or test, conduct structured debriefs. Identify what worked, what failed and update BCP, infrastructure and training accordingly. Track implementation of improvements.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.27, A.5.30",
+        "nist_ref": "NIST CSF 2.0 – ID.IM (Improvement)",
+        "cis_ref": "CIS Controls v8 – Control 17.8",
+        "nis2_ref": "NIS2 – Article 21(2)(c) and 21(2)(f)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "RC_Q6",
+        "applies_if_score_below": 3,
+        "title": "Integrate resilience into strategic planning and supply chain",
+        "description": "Resilience considerations are reactive and not embedded in long-term planning or supplier management.",
+        "improvement_tips": "Include resilience and continuity criteria in project planning, supplier onboarding and infrastructure design. Evaluate single-points-of-failure and implement redundancy where feasible.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.19, A.5.30",
+        "nist_ref": "NIST CSF 2.0 – RC.RP (Incident Recovery Plan Execution), GV.SC (Supply Chain Risk Management)",
+        "cis_ref": "CIS Controls v8 – Control 15.1, 15.2",
+        "nis2_ref": "NIS2 – Article 21(2)(c) and 21(2)(d)",
+        "priority": "high"
+      }
+    ]
+  }

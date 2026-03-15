@@ -1,0 +1,123 @@
+{
+    "area_id": "IDENTIFY",
+    "name": "Identify – Assets, Risk & Business Context",
+    "weight": 0.90,
+    "description": "Understanding the business context, assets, dependencies and cybersecurity risks to support risk-based decision-making.",
+    "maturity_scale": {
+      "0": "Not implemented – no practices in place.",
+      "1": "Ad hoc – informal practices, not documented or consistent.",
+      "2": "Partially defined – some documented practices, applied inconsistently.",
+      "3": "Defined and implemented – documented, communicated, and generally followed.",
+      "4": "Measured and monitored – effectiveness is regularly reviewed and improved.",
+      "5": "Optimized – practices are proactive, continuously improved, and aligned with business strategy."
+    },
+    "questions": [
+      {
+        "question_id": "ID_Q1",
+        "text": "Is there an up-to-date inventory of critical information assets (systems, applications, data, devices)?",
+        "description": "Assesses whether the organization maintains an accurate and current inventory of key information assets that are relevant for cybersecurity management.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "ID_Q2",
+        "text": "Are information assets classified according to their sensitivity and business criticality?",
+        "description": "Evaluates whether the organization uses a formal classification scheme (e.g., public, internal, confidential) and criticality levels to prioritize protection efforts.",
+        "weight": 1.0
+      },
+      {
+        "question_id": "ID_Q3",
+        "text": "Is there a documented understanding of the organization's business processes and how they depend on IT systems and data?",
+        "description": "Checks whether key business processes and their dependencies on technology and information assets are documented and understood.",
+        "weight": 0.85
+      },
+      {
+        "question_id": "ID_Q4",
+        "text": "Are cybersecurity risks regularly identified, assessed and recorded in a risk register?",
+        "description": "Assesses whether the organization has a repeatable process for identifying and assessing cybersecurity risks and documenting them in a structured form.",
+        "weight": 1.15
+      },
+      {
+        "question_id": "ID_Q5",
+        "text": "Are risk treatment decisions (accept, mitigate, transfer, avoid) documented and approved by appropriate risk owners?",
+        "description": "Evaluates whether risk decisions are made consciously, recorded and approved by accountable risk owners rather than handled informally.",
+        "weight": 1.0
+      },
+      {
+        "question_id": "ID_Q6",
+        "text": "Are dependencies on external providers and third parties identified and included in risk assessments?",
+        "description": "Checks whether risks related to outsourced services, cloud providers, suppliers and other third parties are explicitly considered in the risk management process.",
+        "weight": 0.85
+      }
+    ],
+    "recommendations": [
+      {
+        "question_id": "ID_Q1",
+        "applies_if_score_below": 3,
+        "title": "Build and maintain an inventory of critical information assets",
+        "description": "The organization does not maintain a complete and up-to-date inventory of critical information assets. This makes it difficult to know what needs to be protected and to what extent.",
+        "improvement_tips": "Create a centralized inventory of key information assets, including systems, applications, databases, devices and data repositories. At minimum, record asset owner, location, purpose and business criticality. Start from the most critical systems and gradually expand the inventory. Review and update the inventory regularly (e.g., quarterly) and when significant changes occur.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.9",
+        "nist_ref": "NIST CSF 2.0 – ID.AM (Asset Management)",
+        "cis_ref": "CIS Controls v8 – Control 1.1, 2.1",
+        "nis2_ref": "NIS2 – Article 21(2)(i)",
+        "priority": "high"
+      },
+      {
+        "question_id": "ID_Q2",
+        "applies_if_score_below": 3,
+        "title": "Introduce information classification and handling rules",
+        "description": "Information assets are not consistently classified by sensitivity and criticality. As a result, security controls may not be aligned with the true importance of the data.",
+        "improvement_tips": "Define a simple information classification scheme (e.g., Public, Internal, Confidential, Restricted). Assign classification levels to key information assets based on confidentiality, integrity and availability requirements. Document basic handling rules for each class (storage, sharing, access, disposal) and communicate them to employees. Apply labels or metadata where feasible.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.12, A.5.13",
+        "nist_ref": "NIST CSF 2.0 – ID.AM (Asset Management)",
+        "cis_ref": "CIS Controls v8 – Control 3.1, 3.7",
+        "nis2_ref": "NIS2 – Article 21(2)(i)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "ID_Q3",
+        "applies_if_score_below": 3,
+        "title": "Document key business processes and their IT dependencies",
+        "description": "The organization does not have a clear, documented view of which business processes depend on which systems and data. This limits its ability to prioritize protection and recovery efforts.",
+        "improvement_tips": "Identify the most important business processes (e.g., order processing, production, customer support) and document which systems, applications and data they depend on. Capture at least process owner, supporting systems and impact of unavailability. Use this information to prioritize cybersecurity and continuity measures.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.29, A.5.30",
+        "nist_ref": "NIST CSF 2.0 – GV.OC (Organizational Context), ID.AM (Asset Management)",
+        "nis2_ref": "NIS2 – Article 21(2)(c)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "ID_Q4",
+        "applies_if_score_below": 3,
+        "title": "Establish a structured cybersecurity risk assessment process",
+        "description": "Cybersecurity risks are not identified and assessed in a consistent and repeatable way. Risk information is fragmented or not recorded in a central register.",
+        "improvement_tips": "Define a basic risk assessment methodology for cybersecurity, including risk sources, likelihood and impact criteria. Conduct regular risk assessments for critical assets and processes. Record identified risks, their ratings and proposed treatments in a risk register. Review and update the register periodically and after major incidents or changes.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 6.1.2, Clause 8.2",
+        "nist_ref": "NIST CSF 2.0 – ID.RA (Risk Assessment)",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "high"
+      },
+      {
+        "question_id": "ID_Q5",
+        "applies_if_score_below": 3,
+        "title": "Formalize and document risk treatment decisions",
+        "description": "Risk treatment decisions (accepting, mitigating, transferring or avoiding risks) are not consistently documented or approved by accountable risk owners. This may lead to unmanaged or misunderstood risks.",
+        "improvement_tips": "For each significant cybersecurity risk, document the chosen treatment option (accept, mitigate, transfer, avoid) together with justification, responsible owner and target completion dates for mitigation actions. Ensure that risk owners formally approve these decisions. Review risk status and treatment progress on a regular basis.",
+        "iso_ref": "ISO/IEC 27001:2022 – Clause 6.1.3 (Information security risk treatment)",
+        "nist_ref": "NIST CSF 2.0 – GV.RM (Risk Management Strategy)",
+        "nis2_ref": "NIS2 – Article 21(2)(a)",
+        "priority": "medium"
+      },
+      {
+        "question_id": "ID_Q6",
+        "applies_if_score_below": 3,
+        "title": "Include third-party dependencies in cybersecurity risk management",
+        "description": "Dependencies on external providers and third parties are not fully identified or evaluated from a cybersecurity perspective. This increases exposure to supply chain risks.",
+        "improvement_tips": "Identify key external providers and third parties that support critical systems or process sensitive data (e.g., cloud, hosting, SaaS, outsourced IT). Include them in the asset inventory and risk assessments. Evaluate cyber risks related to these providers and define appropriate controls, such as security clauses in contracts, due diligence, certifications or periodic assessments.",
+        "iso_ref": "ISO/IEC 27001:2022 – Annex A.5.19, A.5.20",
+        "nist_ref": "NIST CSF 2.0 – GV.SC (Cybersecurity Supply Chain Risk Management)",
+        "cis_ref": "CIS Controls v8 – Control 15.1, 15.2",
+        "nis2_ref": "NIS2 – Article 21(2)(d)",
+        "priority": "high"
+      }
+    ]
+  }
